@@ -1,7 +1,8 @@
 # Google Play Store Listing — Tomato Time
 
 **App name:** Tomato Time  
-**Developer:** Studio 9  
+**Developer (Google Play):** TheStudio9  
+**Brand:** Studio 9  
 **Package:** com.studio9.tomatotime  
 **Category:** Productivity  
 **Content rating:** Everyone  
@@ -70,7 +71,7 @@ PRIVACY
 
 Tomato Time stores your harvest stats locally on your device. No sign-up, no cloud sync, no ads. Your focus data stays yours.
 
-Made with care by Studio 9.
+Made with care by Studio 9. Published on Google Play by TheStudio9.
 ```
 
 ---

@@ -2,7 +2,8 @@
 
 Guia em português para publicar a app na conta da Play Console e fazer **teste interno** antes de abrir ao público.
 
-**Desenvolvedor da app:** Studio 9  
+**Publicado na Play Store por:** TheStudio9  
+**Marca / design:** Studio 9  
 **Nome na loja:** Tomato Time  
 **Package ID:** `com.studio9.tomatotime`  
 **Versão:** 1.0.0  
@@ -133,7 +134,7 @@ PRIVACY
 
 Tomato Time stores your harvest stats locally on your device. No sign-up, no cloud sync, no ads. Your focus data stays yours.
 
-Made with care by Studio 9.
+Made with care by Studio 9. Published on Google Play by TheStudio9.
 ```
 
 ### Gráficos (upload dos ficheiros da pasta Dropbox)
