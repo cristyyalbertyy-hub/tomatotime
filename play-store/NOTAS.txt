@@ -1,0 +1,35 @@
+TOMATO TIME — Notas para a Play Console
+========================================
+
+Package ID (não alterar):
+  com.studio9.tomatotime
+
+Ficheiro da app (upload em Internal testing):
+  tomato-time-v1.0.0.aab
+
+POLÍTICA DE PRIVACIDADE — URL obrigatório
+-----------------------------------------
+Colar este URL na Play Console (Store listing + Data safety).
+
+  [ PREENCHER ANTES DO UPLOAD ]
+  Exemplo: https://SEU-SITE.github.io/privacy-policy.html
+
+O Cristóvão deve publicar o ficheiro public/privacy-policy.html
+(GitHub Pages, Netlify, ou site Studio 9).
+
+EMAIL DE CONTACTO NA LOJA
+-------------------------
+  [ email de suporte / Studio 9 ]
+
+CONTA DE TESTE (Internal testing)
+---------------------------------
+Adicionar emails Gmail dos testadores na lista "Internal testing".
+Copiar o link de opt-in que a Google gera e enviar a cada pessoa.
+
+NÃO PARTILHAR NESTA PASTA
+-------------------------
+  - tomatotime-release.keystore
+  - keystore.properties
+  - SIGNING_CREDENTIALS.txt
+
+Guia completo em português: docs/guia-teste-interno-pt.md

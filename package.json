@@ -1,0 +1,35 @@
+{
+  "name": "tomato-time",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "cap:sync": "npm run build && npx cap sync",
+    "cap:android": "npx cap open android",
+    "icons": "node scripts/generate-icons.mjs",
+    "store-assets": "node scripts/generate-icons.mjs && node scripts/generate-store-assets.mjs",
+    "screenshots": "npm run build && node scripts/capture-screenshots.mjs",
+    "aab": "node scripts/build-release-aab.mjs"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.2.0",
+    "@capacitor/app": "^7.1.2",
+    "@capacitor/core": "^7.2.0",
+    "@capacitor/local-notifications": "^7.0.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.2.0",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "playwright": "^1.60.0",
+    "sharp": "^0.34.5",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
+  }
+}
