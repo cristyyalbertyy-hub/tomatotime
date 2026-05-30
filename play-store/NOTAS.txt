@@ -11,11 +11,14 @@ POLÍTICA DE PRIVACIDADE — URL obrigatório
 -----------------------------------------
 Colar este URL na Play Console (Store listing + Data safety).
 
-  [ PREENCHER ANTES DO UPLOAD ]
-  Exemplo: https://SEU-SITE.github.io/privacy-policy.html
+  https://cristyyalbertyy-hub.github.io/tomatotime/
 
-O Cristóvão deve publicar o ficheiro public/privacy-policy.html
-(GitHub Pages, Netlify, ou site Studio 9).
+  (Ativar em: github.com/cristyyalbertyy-hub/tomatotime → Settings → Pages
+   → branch main → folder /docs → Save — esperar 1–3 min)
+
+  URL alternativa: https://cristyyalbertyy-hub.github.io/tomatotime/privacy-policy.html
+
+  Repositório: https://github.com/cristyyalbertyy-hub/tomatotime
 
 EMAIL DE CONTACTO NA LOJA
 -------------------------
