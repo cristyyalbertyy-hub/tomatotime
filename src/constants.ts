@@ -7,6 +7,17 @@ export const CYCLE_DURATION_SEC =
 
 export type Phase = 'work' | 'break' | 'idle'
 
+export const MEDICAL_SITE_URL = 'https://medical-science-lilac.vercel.app/conta/'
+
+export const STUDY_TIPS = [
+  'One journey = 4 × 25 min focus + short breaks — about 2 hours of deep study.',
+  'Put your phone face-down until the tomato reaches the end of the track.',
+  'After each session, jot three bullet points while the memory is fresh.',
+  'Use breaks to stand, stretch, and look away from the screen — not social media.',
+  'Small daily journeys beat one long cramming block before the exam.',
+  'Open your Studio9 packages from Medical Science when a session ends.',
+] as const
+
 export const COLORS = {
   bg: '#d8f0f5',
   teal: '#3aadab',

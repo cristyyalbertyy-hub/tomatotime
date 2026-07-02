@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: var(--bg);
+  background: transparent;
 }
 
 /* ── Main screen ── */
@@ -57,11 +57,12 @@
 .brand-title {
   display: flex;
   align-items: center;
-  font-size: 0.95rem;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   line-height: 1;
-  text-transform: uppercase;
+  text-transform: none;
   white-space: nowrap;
 }
 
@@ -81,11 +82,13 @@
   flex-direction: column;
   align-items: flex-end;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 10px;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
   padding: 6px 10px;
-  border: 1.5px solid var(--teal);
+  border: 1.5px solid rgba(58, 173, 171, 0.45);
   min-width: 64px;
+  box-shadow: 0 4px 16px rgba(31, 78, 107, 0.08);
 }
 
 .top-bar--focus .journey-counter {
@@ -336,12 +339,6 @@
 
 .track-progress--break {
   background: linear-gradient(90deg, #ffd56a, var(--orange));
-  animation: break-glow 2s ease-in-out infinite;
-}
-
-@keyframes break-glow {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
 }
 
 .tomato-on-track {
@@ -350,14 +347,13 @@
   top: 28px;
   transform: translate(-50%, -100%);
   z-index: 10;
-  filter: drop-shadow(0 3px 8px rgba(245, 166, 35, 0.4));
+  filter: drop-shadow(0 3px 8px rgba(232, 72, 72, 0.35));
   transition: left 0.1s linear;
   pointer-events: none;
 }
 
-.tomato-on-track--on-break-row {
-  left: 50% !important;
-  transform: translate(-50%, -100%);
+.track-marker--break {
+  color: var(--orange-deep);
 }
 
 /* ── Journey complete overlay ── */
@@ -406,6 +402,236 @@
   color: var(--dark);
   opacity: 0.75;
   margin-top: 8px;
+}
+
+.journey-overlay-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 12px 22px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: white;
+  background: linear-gradient(135deg, var(--teal), #4ecdc4);
+  box-shadow: 0 6px 24px rgba(58, 173, 171, 0.45);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.journey-overlay-cta:active {
+  transform: scale(0.97);
+}
+
+/* ── Confetti ── */
+.confetti-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -12px;
+  border-radius: 2px;
+  opacity: 0.95;
+  animation: confetti-fall linear forwards infinite;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0.35;
+  }
+}
+
+/* ── Timer ring ── */
+.timer-section {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0 0;
+  flex-shrink: 0;
+}
+
+.timer-ring {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(220px, 52vw);
+  height: min(220px, 52vw);
+}
+
+.timer-ring-svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 8px 24px rgba(58, 173, 171, 0.2));
+}
+
+.timer-ring-track {
+  stroke: rgba(58, 173, 171, 0.18);
+}
+
+.timer-ring-progress {
+  stroke: url(#timer-gradient);
+  stroke: var(--teal);
+  transition: stroke-dashoffset 0.35s linear;
+}
+
+.timer-ring.work .timer-ring-progress {
+  stroke: var(--teal);
+}
+
+.timer-ring.break .timer-ring-progress {
+  stroke: var(--orange-deep);
+}
+
+.timer-ring.running .timer-ring-progress {
+  filter: drop-shadow(0 0 6px rgba(58, 173, 171, 0.45));
+}
+
+.timer-ring.break.running .timer-ring-progress {
+  filter: drop-shadow(0 0 6px rgba(232, 136, 12, 0.45));
+}
+
+.timer-ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.timer-ring-phase {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--teal);
+  opacity: 0.85;
+}
+
+.timer-ring.break .timer-ring-phase {
+  color: var(--orange-deep);
+}
+
+.timer-ring-time {
+  font-size: clamp(2.4rem, 10vw, 3.2rem);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--dark);
+  letter-spacing: -0.02em;
+}
+
+.timer-ring.running .timer-ring-time {
+  animation: timer-pulse 2s ease-in-out infinite;
+}
+
+@keyframes timer-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.timer-ring-sub {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--dark);
+  opacity: 0.45;
+}
+
+/* ── Study tip ── */
+.study-tip {
+  margin: 8px 12px 0;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(58, 173, 171, 0.25);
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--dark);
+  opacity: 0.88;
+  text-align: center;
+  animation: tip-in 0.5s ease;
+  flex-shrink: 0;
+}
+
+.study-tip-label {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 2px 8px;
+  border-radius: 50px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: white;
+  background: linear-gradient(135deg, var(--orange), var(--orange-deep));
+  vertical-align: middle;
+}
+
+@keyframes tip-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 0.88; transform: translateY(0); }
+}
+
+/* ── Studio9 link & footer ── */
+.main-screen-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0 4px;
+  flex-shrink: 0;
+}
+
+.studio9-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--dark);
+  opacity: 0.65;
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(31, 78, 107, 0.12);
+  transition: opacity 0.2s, background 0.2s, border-color 0.2s;
+}
+
+.studio9-link:hover,
+.studio9-link:focus-visible {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.65);
+  border-color: rgba(58, 173, 171, 0.35);
+}
+
+.studio9-link-mark {
+  font-weight: 900;
+  color: var(--teal);
+}
+
+.studio9-link-sep {
+  opacity: 0.4;
+}
+
+.keyboard-hint {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--dark);
+  opacity: 0.45;
 }
 
 .timer-display--break .timer-minute {

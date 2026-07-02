@@ -42,7 +42,7 @@ function getRowProgress(
 ): number {
   if (celebrating) return 100
   if (i < sessionIndex) return 100
-  if (phase === 'break' && i === sessionIndex) return 100
+  if (phase === 'break' && i === sessionIndex) return tomatoPos.x
   if (phase === 'work' && i === sessionIndex) return tomatoPos.x
   return 0
 }
@@ -79,7 +79,8 @@ export function SessionTracks({
           ((phase === 'work' && i === sessionIndex) ||
             (phase === 'break' && i === sessionIndex))
 
-        const showMarkers = rowState === 'active' || rowState === 'ready'
+        const showWorkMarkers = rowState === 'active' || rowState === 'ready'
+        const showBreakMarkers = rowState === 'break'
 
         return (
           <div
@@ -97,8 +98,12 @@ export function SessionTracks({
               )}
 
               <div className="track-wrap">
-                {showMarkers ? (
+                {showWorkMarkers ? (
                   <span className="track-marker track-marker--start">1</span>
+                ) : showBreakMarkers ? (
+                  <span className="track-marker track-marker--start track-marker--break">
+                    1
+                  </span>
                 ) : (
                   <span className="track-marker track-marker--ghost" />
                 )}
@@ -130,17 +135,8 @@ export function SessionTracks({
                       className={[
                         'tomato-on-track',
                         `tomato-on-track--${tomatoMood}`,
-                        rowState === 'break'
-                          ? 'tomato-on-track--on-break-row'
-                          : '',
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
-                      style={
-                        rowState === 'break'
-                          ? undefined
-                          : { left: `${tomatoPos.x}%` }
-                      }
+                      ].join(' ')}
+                      style={{ left: `${tomatoPos.x}%` }}
                     >
                       <Tomato mood={tomatoMood} size={44} />
                     </div>
@@ -156,8 +152,12 @@ export function SessionTracks({
                   )}
                 </div>
 
-                {showMarkers ? (
+                {showWorkMarkers ? (
                   <span className="track-marker track-marker--end">25</span>
+                ) : showBreakMarkers ? (
+                  <span className="track-marker track-marker--end track-marker--break">
+                    5
+                  </span>
                 ) : (
                   <span className="track-marker track-marker--ghost" />
                 )}

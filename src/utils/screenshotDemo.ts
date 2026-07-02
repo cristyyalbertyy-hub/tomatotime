@@ -1,6 +1,31 @@
+import {
+  BREAK_DURATION_SEC,
+  WORK_DURATION_SEC,
+} from '../constants'
+
 export type ScreenshotScene = 'idle' | 'work' | 'break' | 'celebrate' | 'harvest'
 
 const SCENES: ScreenshotScene[] = ['idle', 'work', 'break', 'celebrate', 'harvest']
+
+function elapsedFromDisplay(minute: number, second: number) {
+  return (minute - 1) * 60 + (second - 1)
+}
+
+function demoTiming(
+  phase: 'work' | 'break' | 'idle',
+  minute: number,
+  second: number,
+) {
+  if (phase === 'idle') {
+    return { remainingSec: WORK_DURATION_SEC, phaseProgress: 0 }
+  }
+  const limit = phase === 'work' ? WORK_DURATION_SEC : BREAK_DURATION_SEC
+  const elapsed = elapsedFromDisplay(minute, second)
+  return {
+    remainingSec: Math.max(0, limit - elapsed),
+    phaseProgress: Math.min(1, elapsed / limit),
+  }
+}
 
 export function getScreenshotScene(): ScreenshotScene | null {
   const param = new URLSearchParams(window.location.search).get('screenshot')
@@ -14,6 +39,8 @@ export interface DemoTimerProps {
   sessionIndex: number
   minute: number
   second: number
+  remainingSec: number
+  phaseProgress: number
   tomatoPos: { x: number }
   tomatoVisible: boolean
   celebrating: boolean
@@ -31,6 +58,7 @@ export function getDemoTimerProps(scene: ScreenshotScene): DemoTimerProps {
         sessionIndex: 0,
         minute: 12,
         second: 34,
+        ...demoTiming('work', 12, 34),
         tomatoPos: { x: 48 },
         tomatoVisible: true,
         celebrating: false,
@@ -45,7 +73,8 @@ export function getDemoTimerProps(scene: ScreenshotScene): DemoTimerProps {
         sessionIndex: 1,
         minute: 3,
         second: 15,
-        tomatoPos: { x: 100 },
+        ...demoTiming('break', 3, 15),
+        tomatoPos: { x: 55 },
         tomatoVisible: true,
         celebrating: false,
         journeys: 3,
@@ -59,6 +88,8 @@ export function getDemoTimerProps(scene: ScreenshotScene): DemoTimerProps {
         sessionIndex: 0,
         minute: 1,
         second: 1,
+        remainingSec: 0,
+        phaseProgress: 1,
         tomatoPos: { x: 100 },
         tomatoVisible: true,
         celebrating: true,
@@ -73,6 +104,7 @@ export function getDemoTimerProps(scene: ScreenshotScene): DemoTimerProps {
         sessionIndex: 0,
         minute: 1,
         second: 1,
+        ...demoTiming('idle', 1, 1),
         tomatoPos: { x: 0 },
         tomatoVisible: false,
         celebrating: false,
@@ -88,6 +120,7 @@ export function getDemoTimerProps(scene: ScreenshotScene): DemoTimerProps {
         sessionIndex: 0,
         minute: 1,
         second: 1,
+        ...demoTiming('idle', 1, 1),
         tomatoPos: { x: 0 },
         tomatoVisible: false,
         celebrating: false,

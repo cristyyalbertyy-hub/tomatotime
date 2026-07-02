@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { usePomodoroTimer } from './hooks/usePomodoroTimer'
 import { useSoundSettings } from './hooks/useSoundSettings'
 import { useHarvest } from './hooks/useHarvest'
@@ -33,6 +33,35 @@ export default function App() {
   const harvestStats = demoHarvest ?? harvest
   const todayTomatoes = demoHarvest?.todayTomatoes ?? harvest.todayTomatoes
 
+  useEffect(() => {
+    if (screenshotScene) return
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (
+        event.target instanceof HTMLInputElement ||
+        event.target instanceof HTMLTextAreaElement
+      ) {
+        return
+      }
+
+      if (event.code !== 'Space') return
+      event.preventDefault()
+
+      if (timer.celebrating) return
+      if (timer.status === 'running') {
+        timer.pause()
+        return
+      }
+      void (async () => {
+        if (sound.soundOn) await unlockAudio()
+        timer.go()
+      })()
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [screenshotScene, timer, sound.soundOn])
+
   return (
     <div className="app">
       <MainScreen
@@ -40,6 +69,8 @@ export default function App() {
         tomatoVisible={timerProps.tomatoVisible}
         minute={timerProps.minute}
         second={timerProps.second}
+        remainingSec={timerProps.remainingSec}
+        phaseProgress={timerProps.phaseProgress}
         journeys={timerProps.journeys}
         todayTomatoes={todayTomatoes}
         cycleSessionDone={timerProps.cycleSessionDone}

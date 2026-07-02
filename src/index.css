@@ -8,10 +8,12 @@
 
 :root {
   --bg: #d8f0f5;
+  --bg-deep: #b8e4ec;
   --teal: #3aadab;
-  --dark: #3d4f5f;
+  --dark: #1f4e6b;
   --orange: #f5a623;
   --orange-deep: #e8890c;
+  --glass: rgba(255, 255, 255, 0.55);
 }
 
 html,
@@ -21,8 +23,13 @@ body,
 }
 
 body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: var(--bg);
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background:
+    radial-gradient(ellipse 120% 80% at 10% -10%, rgba(58, 173, 171, 0.35), transparent 55%),
+    radial-gradient(ellipse 90% 70% at 100% 0%, rgba(245, 166, 35, 0.18), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(31, 78, 107, 0.12), transparent 55%),
+    linear-gradient(165deg, var(--bg) 0%, #eef8fb 45%, var(--bg-deep) 100%);
+  background-attachment: fixed;
   color: var(--dark);
   -webkit-font-smoothing: antialiased;
   user-select: none;
@@ -34,4 +41,21 @@ button {
   cursor: pointer;
   border: none;
   background: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+kbd {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(31, 78, 107, 0.15);
+  box-shadow: 0 1px 0 rgba(31, 78, 107, 0.12);
 }

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { App } from '@capacitor/app'
 import { Capacitor } from '@capacitor/core'
 import {
+  BREAK_DURATION_SEC,
   SESSIONS_PER_CYCLE,
   WORK_DURATION_SEC,
   type Phase,
@@ -40,6 +41,8 @@ interface UsePomodoroTimerReturn {
   sessionIndex: number
   minute: number
   second: number
+  remainingSec: number
+  phaseProgress: number
   tomatoPos: TomatoPosition
   tomatoVisible: boolean
   celebrating: boolean
@@ -67,7 +70,10 @@ function computeBreakDisplay(elapsed: number) {
 
 function computeTomatoPos(elapsed: number, phase: Phase): TomatoPosition {
   if (phase === 'idle') return { x: 0 }
-  if (phase === 'break') return { x: 100 }
+  if (phase === 'break') {
+    const progress = Math.min(elapsed / BREAK_DURATION_SEC, 1)
+    return { x: progress * 100 }
+  }
   const progress = Math.min(elapsed / WORK_DURATION_SEC, 1)
   return { x: progress * 100 }
 }
@@ -275,12 +281,25 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
   const tomatoVisible =
     celebrating || status === 'running' || status === 'paused'
 
+  const phaseDurationSec =
+    phase === 'break' ? BREAK_DURATION_SEC : WORK_DURATION_SEC
+  const remainingSec =
+    phase === 'idle' && !inCycle
+      ? WORK_DURATION_SEC
+      : Math.ceil(getRemainingMs(timerState) / 1000)
+  const phaseProgress =
+    phase === 'idle' && !inCycle
+      ? 0
+      : Math.min(1, Math.max(0, elapsed / phaseDurationSec))
+
   return {
     status,
     phase,
     sessionIndex,
     minute: display.minute,
     second: display.second,
+    remainingSec,
+    phaseProgress,
     tomatoPos,
     tomatoVisible,
     celebrating,
