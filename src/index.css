@@ -7,13 +7,16 @@
 }
 
 :root {
-  --bg: #d8f0f5;
-  --bg-deep: #b8e4ec;
+  --paper: #f9f8f6;
+  --paper-warm: #fffdf9;
+  --bg: var(--paper);
+  --bg-deep: var(--paper-warm);
   --teal: #3aadab;
   --dark: #1f4e6b;
-  --orange: #f5a623;
-  --orange-deep: #e8890c;
-  --glass: rgba(255, 255, 255, 0.55);
+  --orange: #d97a3e;
+  --orange-deep: #b95f29;
+  --sage: #7a9b7a;
+  --glass: rgba(255, 255, 255, 0.56);
 }
 
 html,
@@ -25,10 +28,9 @@ body,
 body {
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   background:
-    radial-gradient(ellipse 120% 80% at 10% -10%, rgba(58, 173, 171, 0.35), transparent 55%),
-    radial-gradient(ellipse 90% 70% at 100% 0%, rgba(245, 166, 35, 0.18), transparent 50%),
-    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(31, 78, 107, 0.12), transparent 55%),
-    linear-gradient(165deg, var(--bg) 0%, #eef8fb 45%, var(--bg-deep) 100%);
+    radial-gradient(circle at 8% 7%, rgba(217, 122, 62, 0.12), transparent 26rem),
+    radial-gradient(circle at 92% 20%, rgba(122, 155, 122, 0.18), transparent 22rem),
+    var(--paper);
   background-attachment: fixed;
   color: var(--dark);
   -webkit-font-smoothing: antialiased;

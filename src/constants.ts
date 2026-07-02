@@ -19,9 +19,9 @@ export const STUDY_TIPS = [
 ] as const
 
 export const COLORS = {
-  bg: '#d8f0f5',
+  bg: '#f9f8f6',
   teal: '#3aadab',
-  dark: '#3d4f5f',
-  orange: '#f5a623',
-  orangeDeep: '#e8890c',
+  dark: '#1f4e6b',
+  orange: '#d97a3e',
+  orangeDeep: '#b95f29',
 } as const

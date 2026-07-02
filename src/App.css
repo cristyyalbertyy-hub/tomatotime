@@ -364,7 +364,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(216, 240, 245, 0.92);
+  background: rgba(249, 248, 246, 0.92);
   backdrop-filter: blur(8px);
   animation: overlay-in 0.5s ease;
 }
