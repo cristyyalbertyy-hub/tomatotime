@@ -69,7 +69,7 @@ export default function App() {
         tomatoVisible={timerProps.tomatoVisible}
         minute={timerProps.minute}
         second={timerProps.second}
-        remainingSec={timerProps.remainingSec}
+        elapsedSec={timerProps.elapsedSec}
         phaseProgress={timerProps.phaseProgress}
         journeys={timerProps.journeys}
         todayTomatoes={todayTomatoes}

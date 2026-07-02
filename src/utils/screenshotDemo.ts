@@ -17,12 +17,12 @@ function demoTiming(
   second: number,
 ) {
   if (phase === 'idle') {
-    return { remainingSec: WORK_DURATION_SEC, phaseProgress: 0 }
+    return { elapsedSec: 0, phaseProgress: 0 }
   }
   const limit = phase === 'work' ? WORK_DURATION_SEC : BREAK_DURATION_SEC
   const elapsed = elapsedFromDisplay(minute, second)
   return {
-    remainingSec: Math.max(0, limit - elapsed),
+    elapsedSec: elapsed,
     phaseProgress: Math.min(1, elapsed / limit),
   }
 }
@@ -39,7 +39,7 @@ export interface DemoTimerProps {
   sessionIndex: number
   minute: number
   second: number
-  remainingSec: number
+  elapsedSec: number
   phaseProgress: number
   tomatoPos: { x: number }
   tomatoVisible: boolean
@@ -88,7 +88,7 @@ export function getDemoTimerProps(scene: ScreenshotScene): DemoTimerProps {
         sessionIndex: 0,
         minute: 1,
         second: 1,
-        remainingSec: 0,
+        elapsedSec: 0,
         phaseProgress: 1,
         tomatoPos: { x: 100 },
         tomatoVisible: true,

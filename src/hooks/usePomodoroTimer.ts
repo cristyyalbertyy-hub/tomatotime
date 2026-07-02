@@ -41,7 +41,7 @@ interface UsePomodoroTimerReturn {
   sessionIndex: number
   minute: number
   second: number
-  remainingSec: number
+  elapsedSec: number
   phaseProgress: number
   tomatoPos: TomatoPosition
   tomatoVisible: boolean
@@ -283,10 +283,8 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
 
   const phaseDurationSec =
     phase === 'break' ? BREAK_DURATION_SEC : WORK_DURATION_SEC
-  const remainingSec =
-    phase === 'idle' && !inCycle
-      ? WORK_DURATION_SEC
-      : Math.ceil(getRemainingMs(timerState) / 1000)
+  const elapsedSec =
+    phase === 'idle' && !inCycle ? 0 : Math.floor(elapsed)
   const phaseProgress =
     phase === 'idle' && !inCycle
       ? 0
@@ -298,7 +296,7 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
     sessionIndex,
     minute: display.minute,
     second: display.second,
-    remainingSec,
+    elapsedSec,
     phaseProgress,
     tomatoPos,
     tomatoVisible,

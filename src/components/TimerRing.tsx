@@ -3,19 +3,19 @@ import { BREAK_DURATION_SEC, WORK_DURATION_SEC, type Phase } from '../constants'
 
 type Props = {
   phase: Phase
-  remainingSec: number
+  elapsedSec: number
   phaseProgress: number
   isRunning: boolean
 }
 
 function formatTime(totalSec: number) {
-  const sec = Math.max(0, Math.ceil(totalSec))
+  const sec = Math.max(0, Math.floor(totalSec))
   const m = Math.floor(sec / 60)
   const s = sec % 60
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
-export function TimerRing({ phase, remainingSec, phaseProgress, isRunning }: Props) {
+export function TimerRing({ phase, elapsedSec, phaseProgress, isRunning }: Props) {
   const size = 220
   const stroke = 10
   const radius = (size - stroke) / 2
@@ -36,7 +36,7 @@ export function TimerRing({ phase, remainingSec, phaseProgress, isRunning }: Pro
       className={`timer-ring ${phase} ${isRunning ? 'running' : ''}`}
       role="timer"
       aria-live="polite"
-      aria-label={`${phaseLabel}, ${formatTime(remainingSec)} remaining`}
+      aria-label={`${phaseLabel}, ${formatTime(elapsedSec)} elapsed`}
     >
       <svg
         className="timer-ring-svg"
@@ -70,7 +70,7 @@ export function TimerRing({ phase, remainingSec, phaseProgress, isRunning }: Pro
       </svg>
       <div className="timer-ring-center">
         <span className="timer-ring-phase">{phaseLabel}</span>
-        <span className="timer-ring-time">{formatTime(remainingSec)}</span>
+        <span className="timer-ring-time">{formatTime(elapsedSec)}</span>
         {phase !== 'idle' && (
           <span className="timer-ring-sub">
             of {Math.round(phaseTotal / 60)} min

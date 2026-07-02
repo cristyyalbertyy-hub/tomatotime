@@ -13,7 +13,7 @@ interface MainScreenProps {
   tomatoVisible: boolean
   minute: number
   second: number
-  remainingSec: number
+  elapsedSec: number
   phaseProgress: number
   journeys: number
   todayTomatoes: number
@@ -28,7 +28,7 @@ interface MainScreenProps {
 export function MainScreen({
   tomatoPos,
   tomatoVisible,
-  remainingSec,
+  elapsedSec,
   phaseProgress,
   journeys,
   todayTomatoes,
@@ -53,7 +53,7 @@ export function MainScreen({
       ? 'paused'
       : phase === 'break'
         ? 'break'
-        : phase === 'work' && remainingSec <= 300
+        : phase === 'work' && elapsedSec >= 20 * 60
           ? 'tired'
           : status === 'running'
             ? 'focused'
@@ -157,7 +157,7 @@ export function MainScreen({
         <div className="timer-section">
           <TimerRing
             phase={phase}
-            remainingSec={remainingSec}
+            elapsedSec={elapsedSec}
             phaseProgress={phaseProgress}
             isRunning={isRunning}
           />
