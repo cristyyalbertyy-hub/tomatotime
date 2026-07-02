@@ -1,0 +1,12 @@
+node_modules
+android
+ios
+.android-sdk
+play-store
+docs
+scripts
+dist
+*.aab
+*.keystore
+.env
+.env.*
