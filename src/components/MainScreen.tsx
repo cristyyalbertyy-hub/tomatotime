@@ -108,6 +108,9 @@ export function MainScreen({
               <span className="brand-rest"> TIME</span>
             </h1>
           )}
+          {inCycle && !celebrating && (
+            <p className="phase-label phase-label--inline">{phaseLabel}</p>
+          )}
         </div>
 
         <aside
@@ -139,7 +142,9 @@ export function MainScreen({
         </aside>
       </header>
 
-      <p className="phase-label">{phaseLabel}</p>
+      {!inCycle && !celebrating && (
+        <p className="phase-label">{phaseLabel}</p>
+      )}
 
       <div className="track-area">
         <SessionTracks

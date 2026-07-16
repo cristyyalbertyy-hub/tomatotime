@@ -25,7 +25,8 @@
 }
 
 .top-bar--focus {
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  align-items: flex-start;
 }
 
 .brand {
@@ -161,6 +162,14 @@
   flex-shrink: 0;
 }
 
+.phase-label--inline {
+  text-align: left;
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.25;
+  max-width: 14rem;
+}
+
 /* ── Track area — 4 session lines ── */
 .track-area {
   position: relative;
@@ -252,7 +261,7 @@
 .session-track-mini-tomato {
   position: absolute;
   left: 100%;
-  top: 28px;
+  top: 48px;
   transform: translate(-50%, -100%);
   z-index: 5;
   pointer-events: none;
@@ -276,8 +285,8 @@
   position: relative;
   flex: 1;
   min-width: 0;
-  padding-top: 28px;
-  margin-top: -28px;
+  padding-top: 48px;
+  margin-top: -48px;
   padding-bottom: 2px;
 }
 
@@ -346,7 +355,7 @@
 .tomato-on-track {
   position: absolute;
   left: 0;
-  top: 28px;
+  top: 48px;
   transform: translate(-50%, -100%);
   z-index: 10;
   filter: drop-shadow(0 3px 8px rgba(232, 72, 72, 0.35));
@@ -1138,4 +1147,51 @@
 
 .harvest-section--footer {
   margin-bottom: 0;
+}
+
+/* ── Mobile / short viewport ── */
+@media (max-width: 480px), (max-height: 740px) {
+  .main-screen {
+    padding-top: max(6px, env(safe-area-inset-top));
+  }
+
+  .top-bar--focus {
+    margin-bottom: 4px;
+  }
+
+  .phase-label--inline {
+    font-size: 0.74rem;
+  }
+
+  .track-area {
+    justify-content: flex-start;
+    padding-top: 2px;
+  }
+
+  .session-tracks {
+    gap: 10px;
+    padding-top: 2px;
+  }
+
+  .session-track {
+    padding: 4px 2px;
+  }
+
+  .session-track--active,
+  .session-track--break {
+    padding-top: 6px;
+  }
+
+  .timer-section {
+    padding: 0;
+  }
+
+  .timer-ring {
+    width: min(188px, 46vw);
+    height: min(188px, 46vw);
+  }
+
+  .timer-ring-time {
+    font-size: clamp(2rem, 9vw, 2.6rem);
+  }
 }
