@@ -111,6 +111,34 @@ export function SessionTracks({
                 <div className="track-rail">
                   <div
                     className={[
+                      'track-tomato-lane',
+                      rowState === 'active' || rowState === 'break'
+                        ? 'track-tomato-lane--live'
+                        : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                    aria-hidden={!showTomato}
+                  >
+                    {showTomato && (
+                      <div
+                        className={[
+                          'tomato-on-track',
+                          `tomato-on-track--${tomatoMood}`,
+                          tomatoPos.x <= 4 ? 'tomato-on-track--edge-start' : '',
+                          tomatoPos.x >= 96 ? 'tomato-on-track--edge-end' : '',
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                        style={{ left: `${tomatoPos.x}%` }}
+                      >
+                        <Tomato mood={tomatoMood} size={44} />
+                      </div>
+                    )}
+                  </div>
+
+                  <div
+                    className={[
                       'track-line',
                       rowState === 'break' ? 'track-line--break' : '',
                       rowState === 'done' ? 'track-line--done' : '',
@@ -129,18 +157,6 @@ export function SessionTracks({
                       style={{ width: `${progress}%` }}
                     />
                   </div>
-
-                  {showTomato && (
-                    <div
-                      className={[
-                        'tomato-on-track',
-                        `tomato-on-track--${tomatoMood}`,
-                      ].join(' ')}
-                      style={{ left: `${tomatoPos.x}%` }}
-                    >
-                      <Tomato mood={tomatoMood} size={44} />
-                    </div>
-                  )}
 
                   {rowState === 'done' && (
                     <div
