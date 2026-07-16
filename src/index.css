@@ -7,6 +7,7 @@
 }
 
 :root {
+  color-scheme: light;
   --paper: #f9f8f6;
   --paper-warm: #fffdf9;
   --bg: var(--paper);
@@ -17,6 +18,46 @@
   --orange-deep: #b95f29;
   --sage: #7a9b7a;
   --glass: rgba(255, 255, 255, 0.56);
+  --surface: rgba(255, 255, 255, 0.55);
+  --surface-strong: rgba(255, 255, 255, 0.72);
+  --surface-muted: rgba(255, 255, 255, 0.35);
+  --border: rgba(58, 173, 171, 0.25);
+  --border-soft: rgba(31, 78, 107, 0.12);
+  --overlay: rgba(61, 79, 95, 0.35);
+  --text-muted: rgba(31, 78, 107, 0.55);
+  --track-bg: rgba(58, 173, 171, 0.44);
+  --track-break-bg: rgba(245, 166, 35, 0.46);
+  --body-gradient:
+    radial-gradient(circle at 8% 7%, rgba(217, 122, 62, 0.12), transparent 26rem),
+    radial-gradient(circle at 92% 20%, rgba(122, 155, 122, 0.18), transparent 22rem),
+    var(--paper);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #12181d;
+  --paper-warm: #171f26;
+  --bg: var(--paper);
+  --bg-deep: var(--paper-warm);
+  --teal: #4ec4c2;
+  --dark: #e8eef2;
+  --orange: #e8934a;
+  --orange-deep: #d97a3e;
+  --sage: #8fb08f;
+  --glass: rgba(255, 255, 255, 0.08);
+  --surface: rgba(255, 255, 255, 0.06);
+  --surface-strong: rgba(255, 255, 255, 0.1);
+  --surface-muted: rgba(255, 255, 255, 0.04);
+  --border: rgba(78, 196, 194, 0.28);
+  --border-soft: rgba(232, 238, 242, 0.1);
+  --overlay: rgba(0, 0, 0, 0.55);
+  --text-muted: rgba(232, 238, 242, 0.58);
+  --track-bg: rgba(78, 196, 194, 0.38);
+  --track-break-bg: rgba(232, 147, 74, 0.42);
+  --body-gradient:
+    radial-gradient(circle at 8% 7%, rgba(217, 122, 62, 0.1), transparent 26rem),
+    radial-gradient(circle at 92% 20%, rgba(122, 155, 122, 0.12), transparent 22rem),
+    var(--paper);
 }
 
 html,
@@ -27,10 +68,7 @@ body,
 
 body {
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background:
-    radial-gradient(circle at 8% 7%, rgba(217, 122, 62, 0.12), transparent 26rem),
-    radial-gradient(circle at 92% 20%, rgba(122, 155, 122, 0.18), transparent 22rem),
-    var(--paper);
+  background: var(--body-gradient);
   background-attachment: fixed;
   color: var(--dark);
   -webkit-font-smoothing: antialiased;
@@ -57,7 +95,7 @@ kbd {
   font-family: inherit;
   font-size: 0.72rem;
   font-weight: 700;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(31, 78, 107, 0.15);
-  box-shadow: 0 1px 0 rgba(31, 78, 107, 0.12);
+  background: var(--surface-strong);
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 1px 0 var(--border-soft);
 }

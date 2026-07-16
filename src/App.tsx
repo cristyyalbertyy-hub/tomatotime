@@ -49,6 +49,12 @@ export default function App() {
   const settingsLocked = timerProps.inCycle || timerProps.celebrating
 
   useEffect(() => {
+    if (screenshotScene) return
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('harvest') === '1') setShowHarvest(true)
+  }, [screenshotScene])
+
+  useEffect(() => {
     if (screenshotScene || !sound.soundOn) return
 
     const unlock = () => {
@@ -134,9 +140,11 @@ export default function App() {
         <SettingsPanel
           workMin={settings.workMin}
           breakMin={settings.breakMin}
+          theme={settings.theme}
           locked={settingsLocked}
           onChangeWork={settings.updateWorkMin}
           onChangeBreak={settings.updateBreakMin}
+          onChangeTheme={settings.updateTheme}
           onClose={() => setShowSettings(false)}
         />
       )}

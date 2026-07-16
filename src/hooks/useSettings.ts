@@ -6,10 +6,16 @@ import {
   setWorkDurationMin,
   SETTINGS_EVENT,
 } from '../utils/settings'
+import {
+  getThemePreference,
+  setThemePreference,
+  type ThemePreference,
+} from '../utils/theme'
 
 export function useSettings() {
   const [workMin, setWorkMin] = useState(getWorkDurationMin)
   const [breakMin, setBreakMin] = useState(getBreakDurationMin)
+  const [theme, setTheme] = useState<ThemePreference>(getThemePreference)
 
   useEffect(() => {
     const refresh = () => {
@@ -18,6 +24,12 @@ export function useSettings() {
     }
     window.addEventListener(SETTINGS_EVENT, refresh)
     return () => window.removeEventListener(SETTINGS_EVENT, refresh)
+  }, [])
+
+  useEffect(() => {
+    const refreshTheme = () => setTheme(getThemePreference())
+    window.addEventListener('tomato-theme-update', refreshTheme)
+    return () => window.removeEventListener('tomato-theme-update', refreshTheme)
   }, [])
 
   const updateWorkMin = useCallback((minutes: number) => {
@@ -30,5 +42,10 @@ export function useSettings() {
     setBreakMin(getBreakDurationMin())
   }, [])
 
-  return { workMin, breakMin, updateWorkMin, updateBreakMin }
+  const updateTheme = useCallback((next: ThemePreference) => {
+    setThemePreference(next)
+    setTheme(next)
+  }, [])
+
+  return { workMin, breakMin, theme, updateWorkMin, updateBreakMin, updateTheme }
 }

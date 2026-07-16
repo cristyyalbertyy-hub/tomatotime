@@ -162,6 +162,10 @@ export function getHarvestStats(): HarvestStats {
   }
 }
 
+export function getHarvestDays(): Record<string, DayRecord> {
+  return { ...loadData().days }
+}
+
 export function loadJourneysFromHarvest(): number {
   return loadData().totalJourneys
 }

@@ -1,5 +1,6 @@
 import { Tomato } from './Tomato'
 import type { HarvestStats } from '../utils/harvest'
+import { exportHarvestCsv, exportHarvestJson } from '../utils/exportHarvest'
 
 interface HarvestPanelProps {
   stats: HarvestStats
@@ -141,6 +142,14 @@ export function HarvestPanel({ stats, onClose }: HarvestPanelProps) {
         </section>
 
         <section className="harvest-section harvest-section--footer">
+          <div className="harvest-export-row">
+            <button type="button" className="harvest-export-btn" onClick={exportHarvestCsv}>
+              Export CSV
+            </button>
+            <button type="button" className="harvest-export-btn" onClick={exportHarvestJson}>
+              Export JSON
+            </button>
+          </div>
           <div className="harvest-stat-row">
             <div className="harvest-stat-card harvest-stat-card--compact">
               <span className="harvest-stat-number">{stats.streak}</span>

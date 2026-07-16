@@ -4,22 +4,33 @@ import {
   getJourneyDescription,
   getWorkDurationBounds,
 } from '../utils/settings'
+import type { ThemePreference } from '../utils/theme'
 
 interface SettingsPanelProps {
   workMin: number
   breakMin: number
+  theme: ThemePreference
   locked: boolean
   onChangeWork: (minutes: number) => void
   onChangeBreak: (minutes: number) => void
+  onChangeTheme: (theme: ThemePreference) => void
   onClose: () => void
 }
+
+const THEME_OPTIONS: { id: ThemePreference; label: string }[] = [
+  { id: 'light', label: 'Light' },
+  { id: 'dark', label: 'Dark' },
+  { id: 'system', label: 'System' },
+]
 
 export function SettingsPanel({
   workMin,
   breakMin,
+  theme,
   locked,
   onChangeWork,
   onChangeBreak,
+  onChangeTheme,
   onClose,
 }: SettingsPanelProps) {
   const workBounds = getWorkDurationBounds()
@@ -38,7 +49,7 @@ export function SettingsPanel({
             <h2 id="settings-title" className="settings-title">
               Settings
             </h2>
-            <p className="settings-tagline">Tune your journey length</p>
+            <p className="settings-tagline">Tune your journey & appearance</p>
           </div>
           <button type="button" className="settings-close" onClick={onClose} aria-label="Close">
             ×
@@ -86,6 +97,23 @@ export function SettingsPanel({
               onChange={(e) => onChangeBreak(Number(e.target.value))}
             />
             <span className="settings-value">{breakMin} min</span>
+          </div>
+        </div>
+
+        <div className="settings-field">
+          <span className="settings-label">Theme</span>
+          <div className="settings-theme-row" role="group" aria-label="Theme">
+            {THEME_OPTIONS.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                className={`settings-theme-btn ${theme === option.id ? 'settings-theme-btn--active' : ''}`}
+                aria-pressed={theme === option.id}
+                onClick={() => onChangeTheme(option.id)}
+              >
+                {option.label}
+              </button>
+            ))}
           </div>
         </div>
 
