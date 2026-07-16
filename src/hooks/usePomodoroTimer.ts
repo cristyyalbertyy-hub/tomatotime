@@ -9,9 +9,7 @@ import {
 } from '../constants'
 import type { TimerStatus, TomatoPosition } from '../types'
 import {
-  playBackToWork,
-  playBreakStart,
-  playJourneyComplete,
+  playPhaseTransition,
   unlockAudio,
 } from '../utils/sound'
 import type { PhaseTransition } from '../utils/timerStorage'
@@ -21,7 +19,12 @@ import {
   recordTomatoHarvest,
 } from '../utils/harvest'
 import {
+  clearPhaseEndAlarm,
+  schedulePhaseEndAlarm,
+} from '../utils/phaseAlarms'
+import {
   cancelTimerNotifications,
+  notifyPhaseTransition,
   scheduleCelebrateNotification,
   schedulePhaseEndNotification,
 } from '../utils/notifications'
@@ -80,23 +83,9 @@ function computeTomatoPos(elapsed: number, phase: Phase): TomatoPosition {
   return { x: progress * 100 }
 }
 
-function isForeground(): boolean {
-  return typeof document === 'undefined' || document.visibilityState === 'visible'
-}
-
 function playPhaseTransitionSound(transition: PhaseTransition) {
-  if (!transition || !isForeground()) return
-  switch (transition) {
-    case 'work-to-break':
-      void playBreakStart()
-      break
-    case 'break-to-work':
-      void playBackToWork()
-      break
-    case 'journey-complete':
-      void playJourneyComplete()
-      break
-  }
+  if (!transition) return
+  void playPhaseTransition(transition)
 }
 
 function applyReconcileSideEffects(result: ReturnType<typeof reconcileTimerState>) {
@@ -125,14 +114,31 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
     ? SESSIONS_PER_CYCLE
     : timerState.cycleSessionDone
 
-  const syncFromStorage = useCallback(() => {
-    const loaded = loadTimerState()
-    const result = reconcileTimerState(loaded)
+  const commitState = useCallback((next: PersistedTimerState) => {
+    saveTimerState(next)
+    timerStateRef.current = next
+    setTimerState(next)
+  }, [])
+
+  const processPhaseEnd = useCallback(() => {
+    const current = timerStateRef.current
+    if (current.status !== 'running' || current.phaseEndsAt === null) return
+    if (Date.now() < current.phaseEndsAt) return
+
+    const endedPhase = current.phase
+    if (endedPhase !== 'work' && endedPhase !== 'break') return
+
+    const result = reconcileTimerState(current)
     applyReconcileSideEffects(result)
     if (result.journeyCompleted) setJourneys(loadJourneysFromHarvest())
-    saveTimerState(result.state)
-    setTimerState(result.state)
 
+    void notifyPhaseTransition(
+      endedPhase,
+      current.sessionIndex,
+      result.phaseTransition,
+    )
+
+    commitState(result.state)
     if (result.state.status === 'running') {
       void schedulePhaseEndNotification(result.state)
     } else if (result.state.celebratingUntil) {
@@ -140,12 +146,35 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
     } else {
       void cancelTimerNotifications()
     }
-  }, [])
+  }, [commitState])
 
-  const commitState = useCallback((next: PersistedTimerState) => {
-    saveTimerState(next)
-    setTimerState(next)
-  }, [])
+  const armPhaseEndAlarm = useCallback(
+    (state: PersistedTimerState) => {
+      schedulePhaseEndAlarm(state, processPhaseEnd)
+    },
+    [processPhaseEnd],
+  )
+
+  const syncFromStorage = useCallback(() => {
+    const loaded = loadTimerState()
+    const result = reconcileTimerState(loaded)
+    applyReconcileSideEffects(result)
+    if (result.journeyCompleted) setJourneys(loadJourneysFromHarvest())
+    saveTimerState(result.state)
+    timerStateRef.current = result.state
+    setTimerState(result.state)
+
+    if (result.state.status === 'running') {
+      void schedulePhaseEndNotification(result.state)
+      armPhaseEndAlarm(result.state)
+    } else if (result.state.celebratingUntil) {
+      void scheduleCelebrateNotification(result.state.celebratingUntil)
+      clearPhaseEndAlarm()
+    } else {
+      void cancelTimerNotifications()
+      clearPhaseEndAlarm()
+    }
+  }, [armPhaseEndAlarm])
 
   useEffect(() => {
     if (isScreenshot) return
@@ -160,6 +189,24 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
     }, 15000)
     return () => clearInterval(id)
   }, [timerState.status, isScreenshot])
+
+  useEffect(() => {
+    if (isScreenshot) return
+    if (timerState.status !== 'running' || timerState.phaseEndsAt === null) {
+      clearPhaseEndAlarm()
+      return
+    }
+
+    armPhaseEndAlarm(timerState)
+    return () => clearPhaseEndAlarm()
+  }, [
+    timerState.status,
+    timerState.phaseEndsAt,
+    timerState.phase,
+    timerState.sessionIndex,
+    armPhaseEndAlarm,
+    isScreenshot,
+  ])
 
   useEffect(() => {
     if (isScreenshot) return
@@ -198,16 +245,7 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
 
       if (current.status === 'running' && current.phaseEndsAt !== null) {
         if (Date.now() >= current.phaseEndsAt) {
-          const result = reconcileTimerState(current)
-          applyReconcileSideEffects(result)
-          if (result.journeyCompleted) setJourneys(loadJourneysFromHarvest())
-
-          commitState(result.state)
-          if (result.state.status === 'running') {
-            void schedulePhaseEndNotification(result.state)
-          } else if (result.state.celebratingUntil) {
-            void scheduleCelebrateNotification(result.state.celebratingUntil)
-          }
+          processPhaseEnd()
         }
       }
       setTick((t) => t + 1)
@@ -218,6 +256,7 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
     timerState.celebratingUntil,
     timerState.phaseEndsAt,
     commitState,
+    processPhaseEnd,
     isScreenshot,
   ])
 
@@ -260,7 +299,8 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
 
     commitState(next)
     void schedulePhaseEndNotification(next)
-  }, [celebrating, commitState])
+    armPhaseEndAlarm(next)
+  }, [celebrating, commitState, armPhaseEndAlarm])
 
   const pause = useCallback(() => {
     if (timerStateRef.current.status !== 'running') return
@@ -273,12 +313,14 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
     }
     commitState(next)
     void cancelTimerNotifications()
+    clearPhaseEndAlarm()
   }, [commitState])
 
   const reset = useCallback(() => {
     clearTimerState()
     commitState({ ...IDLE_TIMER_STATE })
     void cancelTimerNotifications()
+    clearPhaseEndAlarm()
   }, [commitState])
 
   const inCycle =

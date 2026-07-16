@@ -1,3 +1,5 @@
+import type { PhaseTransition } from './timerStorage'
+
 const SOUND_KEY = 'tomato-time-sound'
 
 let audioCtx: AudioContext | null = null
@@ -139,4 +141,19 @@ export async function playJourneyComplete() {
   notes.forEach((freq, i) => {
     playTone(freq, t + i * 0.18, 0.28, 0.32, i % 2 === 0 ? 'triangle' : 'sine')
   })
+}
+
+export async function playPhaseTransition(transition: PhaseTransition) {
+  if (!transition) return
+  switch (transition) {
+    case 'work-to-break':
+      await playBreakStart()
+      break
+    case 'break-to-work':
+      await playBackToWork()
+      break
+    case 'journey-complete':
+      await playJourneyComplete()
+      break
+  }
 }

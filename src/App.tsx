@@ -6,6 +6,7 @@ import { MainScreen } from './components/MainScreen'
 import { Controls } from './components/UI'
 import { HarvestPanel } from './components/HarvestPanel'
 import { unlockAudio } from './utils/sound'
+import { requestWebNotificationPermission } from './utils/notifications'
 import {
   getDemoHarvestStats,
   getDemoTimerProps,
@@ -26,6 +27,7 @@ export default function App() {
   const handleGo = async () => {
     if (screenshotScene) return
     if (sound.soundOn) await unlockAudio()
+    void requestWebNotificationPermission()
     timer.go()
   }
 
@@ -69,6 +71,7 @@ export default function App() {
       }
       void (async () => {
         if (sound.soundOn) await unlockAudio()
+        void requestWebNotificationPermission()
         timer.go()
       })()
     }

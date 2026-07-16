@@ -1,6 +1,7 @@
 import { Capacitor } from '@capacitor/core'
 import { LocalNotifications } from '@capacitor/local-notifications'
 import { SESSIONS_PER_CYCLE } from '../constants'
+import type { PhaseTransition } from './timerStorage'
 import type { PersistedTimerState } from './timerStorage'
 import {
   allNotificationIds,
@@ -12,28 +13,6 @@ const CHANNEL_ID = 'pomodoro'
 
 function isNative(): boolean {
   return Capacitor.isNativePlatform()
-}
-
-export async function initNotifications(): Promise<void> {
-  if (!isNative()) return
-
-  const perm = await LocalNotifications.requestPermissions()
-  if (perm.display !== 'granted') return
-
-  await LocalNotifications.createChannel({
-    id: CHANNEL_ID,
-    name: 'Pomodoro',
-    description: 'Work, break, and journey reminders',
-    importance: 5,
-    vibration: true,
-  })
-}
-
-export async function cancelTimerNotifications(): Promise<void> {
-  if (!isNative()) return
-  await LocalNotifications.cancel({
-    notifications: allNotificationIds().map((id) => ({ id })),
-  })
 }
 
 function phaseMessage(
@@ -62,6 +41,64 @@ function phaseMessage(
   }
 }
 
+export async function initNotifications(): Promise<void> {
+  if (!isNative()) return
+
+  const perm = await LocalNotifications.requestPermissions()
+  if (perm.display !== 'granted') return
+
+  await LocalNotifications.createChannel({
+    id: CHANNEL_ID,
+    name: 'Pomodoro',
+    description: 'Work, break, and journey reminders',
+    importance: 5,
+    vibration: true,
+    sound: 'default',
+  })
+}
+
+export async function requestWebNotificationPermission(): Promise<boolean> {
+  if (isNative() || typeof Notification === 'undefined') return false
+  if (Notification.permission === 'granted') return true
+  if (Notification.permission === 'denied') return false
+  const result = await Notification.requestPermission()
+  return result === 'granted'
+}
+
+export async function notifyPhaseTransition(
+  endedPhase: 'work' | 'break',
+  sessionIndex: number,
+  transition: PhaseTransition,
+): Promise<void> {
+  if (!transition) return
+
+  const { title, body } = phaseMessage(endedPhase, sessionIndex)
+
+  if (isNative()) return
+
+  if (typeof Notification === 'undefined' || Notification.permission !== 'granted') {
+    return
+  }
+
+  try {
+    const icon = `${import.meta.env.BASE_URL}icon-192.png`
+    new Notification(title, {
+      body,
+      icon,
+      tag: `tomato-phase-${Date.now()}`,
+    })
+  } catch {
+    /* ignore — e.g. mobile Safari without permission */
+  }
+}
+
+export async function cancelTimerNotifications(): Promise<void> {
+  if (!isNative()) return
+  await LocalNotifications.cancel({
+    notifications: allNotificationIds().map((id) => ({ id })),
+  })
+}
+
 export async function schedulePhaseEndNotification(
   state: PersistedTimerState,
 ): Promise<void> {
@@ -85,6 +122,7 @@ export async function schedulePhaseEndNotification(
         channelId: CHANNEL_ID,
         smallIcon: 'ic_stat_tomato',
         iconColor: '#f5a623',
+        sound: 'default',
       },
     ],
   })
@@ -102,6 +140,7 @@ export async function scheduleCelebrateNotification(until: number): Promise<void
         channelId: CHANNEL_ID,
         smallIcon: 'ic_stat_tomato',
         iconColor: '#f5a623',
+        sound: 'default',
       },
     ],
   })
