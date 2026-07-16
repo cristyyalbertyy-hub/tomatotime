@@ -34,6 +34,21 @@ export default function App() {
   const todayTomatoes = demoHarvest?.todayTomatoes ?? harvest.todayTomatoes
 
   useEffect(() => {
+    if (screenshotScene || !sound.soundOn) return
+
+    const unlock = () => {
+      void unlockAudio()
+    }
+
+    window.addEventListener('pointerdown', unlock, { once: true })
+    window.addEventListener('keydown', unlock, { once: true })
+    return () => {
+      window.removeEventListener('pointerdown', unlock)
+      window.removeEventListener('keydown', unlock)
+    }
+  }, [screenshotScene, sound.soundOn])
+
+  useEffect(() => {
     if (screenshotScene) return
 
     const onKeyDown = (event: KeyboardEvent) => {

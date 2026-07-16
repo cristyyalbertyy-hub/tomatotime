@@ -73,12 +73,19 @@ export function getElapsedSec(state: PersistedTimerState, now = Date.now()): num
   return Math.min(limit, Math.max(0, limit - remainingSec))
 }
 
+export type PhaseTransition =
+  | 'work-to-break'
+  | 'break-to-work'
+  | 'journey-complete'
+  | null
+
 export interface ReconcileResult {
   state: PersistedTimerState
   workCompleted: number
   journeyCompleted: boolean
   enteredCelebrate: boolean
   celebrateFinished: boolean
+  phaseTransition: PhaseTransition
 }
 
 export function reconcileTimerState(
@@ -90,6 +97,7 @@ export function reconcileTimerState(
   let journeyCompleted = false
   let enteredCelebrate = false
   let celebrateFinished = false
+  let phaseTransition: PhaseTransition = null
 
   if (state.celebratingUntil !== null) {
     if (now >= state.celebratingUntil) {
@@ -100,6 +108,7 @@ export function reconcileTimerState(
         journeyCompleted,
         enteredCelebrate,
         celebrateFinished,
+        phaseTransition,
       }
     }
     return {
@@ -108,6 +117,7 @@ export function reconcileTimerState(
       journeyCompleted,
       enteredCelebrate,
       celebrateFinished,
+      phaseTransition,
     }
   }
 
@@ -118,12 +128,14 @@ export function reconcileTimerState(
       journeyCompleted,
       enteredCelebrate,
       celebrateFinished,
+      phaseTransition,
     }
   }
 
   while (state.status === 'running' && state.phaseEndsAt !== null && now >= state.phaseEndsAt) {
     if (state.phase === 'work') {
       workCompleted += 1
+      phaseTransition = 'work-to-break'
       state = {
         ...state,
         cycleSessionDone: state.sessionIndex + 1,
@@ -136,6 +148,7 @@ export function reconcileTimerState(
     if (state.sessionIndex >= SESSIONS_PER_CYCLE - 1) {
       journeyCompleted = true
       enteredCelebrate = true
+      phaseTransition = 'journey-complete'
       state = {
         ...IDLE_TIMER_STATE,
         celebratingUntil: now + CELEBRATE_DURATION_MS,
@@ -144,6 +157,7 @@ export function reconcileTimerState(
       break
     }
 
+    phaseTransition = 'break-to-work'
     state = {
       ...state,
       sessionIndex: state.sessionIndex + 1,
@@ -158,6 +172,7 @@ export function reconcileTimerState(
     journeyCompleted,
     enteredCelebrate,
     celebrateFinished,
+    phaseTransition,
   }
 }
 

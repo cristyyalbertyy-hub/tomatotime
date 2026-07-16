@@ -12,7 +12,9 @@ import {
   playBackToWork,
   playBreakStart,
   playJourneyComplete,
+  unlockAudio,
 } from '../utils/sound'
+import type { PhaseTransition } from '../utils/timerStorage'
 import {
   loadJourneysFromHarvest,
   recordJourneyHarvest,
@@ -82,15 +84,27 @@ function isForeground(): boolean {
   return typeof document === 'undefined' || document.visibilityState === 'visible'
 }
 
+function playPhaseTransitionSound(transition: PhaseTransition) {
+  if (!transition || !isForeground()) return
+  switch (transition) {
+    case 'work-to-break':
+      void playBreakStart()
+      break
+    case 'break-to-work':
+      void playBackToWork()
+      break
+    case 'journey-complete':
+      void playJourneyComplete()
+      break
+  }
+}
+
 function applyReconcileSideEffects(result: ReturnType<typeof reconcileTimerState>) {
   for (let i = 0; i < result.workCompleted; i++) {
     recordTomatoHarvest()
   }
   if (result.journeyCompleted) recordJourneyHarvest()
-
-  if (isForeground() && result.enteredCelebrate) {
-    playJourneyComplete()
-  }
+  playPhaseTransitionSound(result.phaseTransition)
 }
 
 export function usePomodoroTimer(): UsePomodoroTimerReturn {
@@ -139,6 +153,15 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
   }, [syncFromStorage, isScreenshot])
 
   useEffect(() => {
+    if (isScreenshot || timerState.status !== 'running') return
+    void unlockAudio()
+    const id = window.setInterval(() => {
+      void unlockAudio()
+    }, 15000)
+    return () => clearInterval(id)
+  }, [timerState.status, isScreenshot])
+
+  useEffect(() => {
     if (isScreenshot) return
     const onVisible = () => {
       if (document.visibilityState === 'visible') syncFromStorage()
@@ -178,18 +201,6 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
           const result = reconcileTimerState(current)
           applyReconcileSideEffects(result)
           if (result.journeyCompleted) setJourneys(loadJourneysFromHarvest())
-
-          if (isForeground()) {
-            if (result.workCompleted > 0 && result.state.phase === 'break') {
-              playBreakStart()
-            } else if (
-              result.workCompleted === 0 &&
-              result.state.phase === 'work' &&
-              current.phase === 'break'
-            ) {
-              playBackToWork()
-            }
-          }
 
           commitState(result.state)
           if (result.state.status === 'running') {
