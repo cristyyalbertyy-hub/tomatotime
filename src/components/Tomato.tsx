@@ -11,10 +11,10 @@ interface TomatoProps {
   size?: number
 }
 
-const TOMATO = '#e84848'
-const TOMATO_DEEP = '#c62828'
-const TOMATO_LIGHT = '#ff8a80'
-const TOMATO_BLUSH = '#ffab91'
+const TOMATO = '#f5a623'
+const TOMATO_DEEP = '#e8890c'
+const TOMATO_LIGHT = '#ffd56a'
+const TOMATO_BLUSH = '#ffb74d'
 const ORANGE_LIGHT = '#ffd56a'
 const TEAL = '#3aadab'
 const TEAL_LIGHT = '#5ec4c2'

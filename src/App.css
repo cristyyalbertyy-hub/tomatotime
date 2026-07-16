@@ -374,7 +374,7 @@
   bottom: 0;
   transform: translate(-50%, 0);
   z-index: 10;
-  filter: drop-shadow(0 3px 8px rgba(232, 72, 72, 0.35));
+  filter: drop-shadow(0 3px 8px rgba(245, 166, 35, 0.4));
   transition: left 0.1s linear;
   pointer-events: none;
 }

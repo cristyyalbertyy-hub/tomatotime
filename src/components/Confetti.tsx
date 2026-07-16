@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-const COLORS = ['#3aadab', '#f5a623', '#e84848', '#ffd56a', '#1f4e6b', '#4ecdc4']
+const COLORS = ['#3aadab', '#f5a623', '#e8890c', '#ffd56a', '#1f4e6b', '#4ecdc4']
 
 function pickColor(i: number) {
   return COLORS[i % COLORS.length]
