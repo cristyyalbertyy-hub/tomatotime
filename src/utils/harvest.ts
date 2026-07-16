@@ -18,10 +18,13 @@ export interface HarvestStats {
   todayJourneys: number
   weekTomatoes: number
   weekJourneys: number
+  monthTomatoes: number
+  monthJourneys: number
   totalTomatoes: number
   totalJourneys: number
   streak: number
   last7Days: { date: string; label: string; tomatoes: number }[]
+  monthDays: { date: string; label: string; tomatoes: number }[]
 }
 
 function todayKey(): string {
@@ -93,6 +96,11 @@ export function recordJourneyHarvest() {
   saveData(data)
 }
 
+function daysInCurrentMonth(): number {
+  const d = new Date()
+  return d.getDate()
+}
+
 export function getHarvestStats(): HarvestStats {
   const data = loadData()
   const today = todayKey()
@@ -114,6 +122,23 @@ export function getHarvestStats(): HarvestStats {
     })
   }
 
+  let monthTomatoes = 0
+  let monthJourneys = 0
+  const monthDays: HarvestStats['monthDays'] = []
+  const monthPrefix = today.slice(0, 7)
+
+  for (let day = 1; day <= daysInCurrentMonth(); day++) {
+    const key = `${monthPrefix}-${String(day).padStart(2, '0')}`
+    const record = data.days[key] ?? { tomatoes: 0, journeys: 0 }
+    monthTomatoes += record.tomatoes
+    monthJourneys += record.journeys
+    monthDays.push({
+      date: key,
+      label: String(day),
+      tomatoes: record.tomatoes,
+    })
+  }
+
   let streak = 0
   for (let i = 0; i < 365; i++) {
     const key = dateKeyFromOffset(-i)
@@ -127,10 +152,13 @@ export function getHarvestStats(): HarvestStats {
     todayJourneys: todayRecord.journeys,
     weekTomatoes,
     weekJourneys,
+    monthTomatoes,
+    monthJourneys,
     totalTomatoes: data.totalTomatoes,
     totalJourneys: data.totalJourneys,
     streak,
     last7Days,
+    monthDays,
   }
 }
 

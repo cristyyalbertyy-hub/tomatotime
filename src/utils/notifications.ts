@@ -3,6 +3,7 @@ import { LocalNotifications } from '@capacitor/local-notifications'
 import { SESSIONS_PER_CYCLE } from '../constants'
 import type { PhaseTransition } from './timerStorage'
 import type { PersistedTimerState } from './timerStorage'
+import { getBreakDurationMin } from './settings'
 import {
   allNotificationIds,
   notificationId,
@@ -21,16 +22,17 @@ function phaseMessage(
 ): { title: string; body: string } {
   if (phase === 'work') {
     const session = sessionIndex + 1
+    const breakMin = getBreakDurationMin()
     return {
       title: 'Break time!',
-      body: `Session ${session} done. Stretch, hydrate, and breathe for 5 minutes.`,
+      body: `Session ${session} done. Stretch, hydrate, and breathe for ${breakMin} minute${breakMin !== 1 ? 's' : ''}.`,
     }
   }
 
   if (sessionIndex >= SESSIONS_PER_CYCLE - 1) {
     return {
       title: 'Journey complete!',
-      body: 'You finished your full 2-hour Tomato Time cycle. Great work!',
+      body: 'You finished your full Tomato Time journey cycle. Great work!',
     }
   }
 

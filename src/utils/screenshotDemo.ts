@@ -133,11 +133,18 @@ export function getDemoTimerProps(scene: ScreenshotScene): DemoTimerProps {
 
 export function getDemoHarvestStats() {
   const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Today']
+  const monthDays = Array.from({ length: 16 }, (_, i) => ({
+    date: `2026-07-${String(i + 1).padStart(2, '0')}`,
+    label: String(i + 1),
+    tomatoes: [0, 2, 4, 0, 6, 4, 8, 0, 3, 5, 0, 4, 6, 0, 2, 8][i] ?? 0,
+  }))
   return {
     todayTomatoes: 8,
     todayJourneys: 1,
     weekTomatoes: 24,
     weekJourneys: 3,
+    monthTomatoes: 52,
+    monthJourneys: 4,
     totalTomatoes: 156,
     totalJourneys: 12,
     streak: 5,
@@ -146,5 +153,6 @@ export function getDemoHarvestStats() {
       label,
       tomatoes: [4, 6, 3, 5, 0, 2, 8][i],
     })),
+    monthDays,
   }
 }

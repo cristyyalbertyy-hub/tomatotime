@@ -1,11 +1,10 @@
 import {
-  BREAK_DURATION_SEC,
   CELEBRATE_DURATION_MS,
   SESSIONS_PER_CYCLE,
-  WORK_DURATION_SEC,
 } from '../constants'
 import type { Phase } from '../constants'
 import type { TimerStatus } from '../types'
+import { getBreakDurationSec, getWorkDurationSec } from './settings'
 
 export const TIMER_STORAGE_KEY = 'tomato-time-timer'
 
@@ -30,8 +29,8 @@ export const IDLE_TIMER_STATE: PersistedTimerState = {
 }
 
 export function phaseDurationMs(phase: Phase): number {
-  if (phase === 'work') return WORK_DURATION_SEC * 1000
-  if (phase === 'break') return BREAK_DURATION_SEC * 1000
+  if (phase === 'work') return getWorkDurationSec() * 1000
+  if (phase === 'break') return getBreakDurationSec() * 1000
   return 0
 }
 
@@ -68,7 +67,7 @@ export function getRemainingMs(state: PersistedTimerState, now = Date.now()): nu
 export function getElapsedSec(state: PersistedTimerState, now = Date.now()): number {
   if (state.phase === 'idle' || state.celebratingUntil !== null) return 0
   const limit =
-    state.phase === 'work' ? WORK_DURATION_SEC : BREAK_DURATION_SEC
+    state.phase === 'work' ? getWorkDurationSec() : getBreakDurationSec()
   const remainingSec = getRemainingMs(state, now) / 1000
   return Math.min(limit, Math.max(0, limit - remainingSec))
 }
@@ -140,7 +139,7 @@ export function reconcileTimerState(
         ...state,
         cycleSessionDone: state.sessionIndex + 1,
         phase: 'break',
-        phaseEndsAt: state.phaseEndsAt + BREAK_DURATION_SEC * 1000,
+        phaseEndsAt: state.phaseEndsAt + getBreakDurationSec() * 1000,
       }
       continue
     }
@@ -162,7 +161,7 @@ export function reconcileTimerState(
       ...state,
       sessionIndex: state.sessionIndex + 1,
       phase: 'work',
-      phaseEndsAt: state.phaseEndsAt + WORK_DURATION_SEC * 1000,
+      phaseEndsAt: state.phaseEndsAt + getWorkDurationSec() * 1000,
     }
   }
 

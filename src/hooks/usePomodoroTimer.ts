@@ -2,12 +2,14 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { App } from '@capacitor/app'
 import { Capacitor } from '@capacitor/core'
 import {
-  BREAK_DURATION_SEC,
   SESSIONS_PER_CYCLE,
-  WORK_DURATION_SEC,
   type Phase,
 } from '../constants'
 import type { TimerStatus, TomatoPosition } from '../types'
+import {
+  getBreakDurationSec,
+  getWorkDurationSec,
+} from '../utils/settings'
 import {
   playPhaseTransition,
   unlockAudio,
@@ -60,15 +62,17 @@ interface UsePomodoroTimerReturn {
 }
 
 function computeWorkDisplay(elapsed: number) {
+  const limitMin = Math.ceil(getWorkDurationSec() / 60)
   return {
-    minute: Math.min(25, Math.floor(elapsed / 60) + 1),
+    minute: Math.min(limitMin, Math.floor(elapsed / 60) + 1),
     second: Math.floor(elapsed % 60) + 1,
   }
 }
 
 function computeBreakDisplay(elapsed: number) {
+  const limitMin = Math.ceil(getBreakDurationSec() / 60)
   return {
-    minute: Math.min(5, Math.floor(elapsed / 60) + 1),
+    minute: Math.min(limitMin, Math.floor(elapsed / 60) + 1),
     second: Math.floor(elapsed % 60) + 1,
   }
 }
@@ -76,10 +80,10 @@ function computeBreakDisplay(elapsed: number) {
 function computeTomatoPos(elapsed: number, phase: Phase): TomatoPosition {
   if (phase === 'idle') return { x: 0 }
   if (phase === 'break') {
-    const progress = Math.min(elapsed / BREAK_DURATION_SEC, 1)
+    const progress = Math.min(elapsed / getBreakDurationSec(), 1)
     return { x: progress * 100 }
   }
-  const progress = Math.min(elapsed / WORK_DURATION_SEC, 1)
+  const progress = Math.min(elapsed / getWorkDurationSec(), 1)
   return { x: progress * 100 }
 }
 
@@ -289,7 +293,7 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
         phase: 'work',
         sessionIndex: 0,
         cycleSessionDone: 0,
-        phaseEndsAt: now + WORK_DURATION_SEC * 1000,
+        phaseEndsAt: now + getWorkDurationSec() * 1000,
         pausedRemainingMs: null,
         celebratingUntil: null,
       }
@@ -335,13 +339,27 @@ export function usePomodoroTimer(): UsePomodoroTimerReturn {
     celebrating || status === 'running' || status === 'paused'
 
   const phaseDurationSec =
-    phase === 'break' ? BREAK_DURATION_SEC : WORK_DURATION_SEC
+    phase === 'break' ? getBreakDurationSec() : getWorkDurationSec()
   const elapsedSec =
     phase === 'idle' && !inCycle ? 0 : Math.floor(elapsed)
   const phaseProgress =
     phase === 'idle' && !inCycle
       ? 0
       : Math.min(1, Math.max(0, elapsed / phaseDurationSec))
+
+  useEffect(() => {
+    if (isScreenshot) return
+    if (status !== 'running') {
+      document.title = 'Tomato Time · Studio9'
+      return
+    }
+    const remainingMs = getRemainingMs(timerStateRef.current)
+    const totalSec = Math.max(0, Math.ceil(remainingMs / 1000))
+    const mm = Math.floor(totalSec / 60)
+    const ss = totalSec % 60
+    const label = phase === 'work' ? 'Focus' : phase === 'break' ? 'Break' : 'Ready'
+    document.title = `${label} ${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')} · Tomato Time`
+  }, [tick, status, phase, isScreenshot])
 
   return {
     status,

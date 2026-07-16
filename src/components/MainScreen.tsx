@@ -1,6 +1,10 @@
 import type { Phase } from '../constants'
 import type { TomatoPosition, TimerStatus } from '../types'
 import { MEDICAL_SITE_URL, SESSIONS_PER_CYCLE } from '../constants'
+import {
+  formatCycleHours,
+  getWorkDurationSec,
+} from '../utils/settings'
 import { Tomato } from './Tomato'
 import { SessionTracks } from './SessionTracks'
 import { TimerRing } from './TimerRing'
@@ -53,7 +57,7 @@ export function MainScreen({
       ? 'paused'
       : phase === 'break'
         ? 'break'
-        : phase === 'work' && elapsedSec >= 20 * 60
+        : phase === 'work' && elapsedSec >= getWorkDurationSec() * 0.8
           ? 'tired'
           : status === 'running'
             ? 'focused'
@@ -65,7 +69,7 @@ export function MainScreen({
       ? `Focus · Session ${sessionIndex + 1} of ${SESSIONS_PER_CYCLE}`
       : phase === 'break'
         ? `Break · Session ${sessionIndex + 1} of ${SESSIONS_PER_CYCLE}`
-        : 'Ready for a 2-hour journey'
+        : `Ready for a ${formatCycleHours()} journey`
 
   const showIdleExtras = !inCycle && !celebrating
 
@@ -78,8 +82,8 @@ export function MainScreen({
             <Tomato mood="celebrate" size={100} />
             <h2 className="journey-overlay-title">Journey Complete!</h2>
             <p className="journey-overlay-sub">
-              2-hour cycle done · {journeys} journey{journeys !== 1 ? 's' : ''}{' '}
-              total
+              {formatCycleHours()} cycle done · {journeys} journey
+              {journeys !== 1 ? 's' : ''} total
             </p>
             <a
               className="journey-overlay-cta"
@@ -121,7 +125,7 @@ export function MainScreen({
           <span className="journey-sublabel">
             {todayTomatoes > 0
               ? `${todayTomatoes} 🍅 today`
-              : '2h cycles'}
+              : `${formatCycleHours()} cycles`}
           </span>
           <span className="journey-count">{journeys}</span>
           <div className="cycle-progress" aria-label="Current cycle progress">

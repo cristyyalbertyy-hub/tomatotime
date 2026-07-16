@@ -12,6 +12,7 @@ interface ControlsProps {
   onReset: () => void
   onToggleSound: () => void
   onOpenHarvest: () => void
+  onOpenSettings: () => void
 }
 
 export function Controls({
@@ -25,6 +26,7 @@ export function Controls({
   onReset,
   onToggleSound,
   onOpenHarvest,
+  onOpenSettings,
 }: ControlsProps) {
   const [confirmReset, setConfirmReset] = useState(false)
 
@@ -47,6 +49,16 @@ export function Controls({
         >
           {soundOn ? '🔊' : '🔇'}
           <span className="btn-sound-label">Sound</span>
+        </button>
+
+        <button
+          type="button"
+          className="btn-settings"
+          onClick={onOpenSettings}
+          aria-label="Open settings"
+        >
+          ⚙
+          <span className="btn-settings-label">Settings</span>
         </button>
 
         <button

@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { BREAK_DURATION_SEC, WORK_DURATION_SEC, type Phase } from '../constants'
+import type { Phase } from '../constants'
+import { getBreakDurationMin, getWorkDurationSec } from '../utils/settings'
 
 type Props = {
   phase: Phase
@@ -28,8 +29,8 @@ export function TimerRing({ phase, elapsedSec, phaseProgress, isRunning }: Props
     return 'Ready'
   }, [phase])
 
-  const phaseTotal =
-    phase === 'work' ? WORK_DURATION_SEC : phase === 'break' ? BREAK_DURATION_SEC : 0
+  const phaseTotalMin =
+    phase === 'work' ? getWorkDurationSec() / 60 : getBreakDurationMin()
 
   return (
     <div
@@ -73,7 +74,7 @@ export function TimerRing({ phase, elapsedSec, phaseProgress, isRunning }: Props
         <span className="timer-ring-time">{formatTime(elapsedSec)}</span>
         {phase !== 'idle' && (
           <span className="timer-ring-sub">
-            of {Math.round(phaseTotal / 60)} min
+            of {Math.round(phaseTotalMin)} min
           </span>
         )}
       </div>

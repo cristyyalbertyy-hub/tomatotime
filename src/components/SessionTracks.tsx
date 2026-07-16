@@ -1,6 +1,7 @@
 import type { Phase } from '../constants'
 import type { TomatoPosition } from '../types'
 import { SESSIONS_PER_CYCLE } from '../constants'
+import { getBreakDurationMin, getWorkDurationMin } from '../utils/settings'
 import { Tomato, type TomatoMood } from './Tomato'
 
 const SESSION_LABELS = ['I', 'II', 'III', 'IV']
@@ -56,6 +57,9 @@ export function SessionTracks({
   celebrating,
   inCycle,
 }: SessionTracksProps) {
+  const workMin = getWorkDurationMin()
+  const breakMin = getBreakDurationMin()
+
   return (
     <div className="session-tracks" aria-label="Four session tracks">
       {Array.from({ length: SESSIONS_PER_CYCLE }).map((_, i) => {
@@ -169,10 +173,10 @@ export function SessionTracks({
                 </div>
 
                 {showWorkMarkers ? (
-                  <span className="track-marker track-marker--end">25</span>
+                  <span className="track-marker track-marker--end">{workMin}</span>
                 ) : showBreakMarkers ? (
                   <span className="track-marker track-marker--end track-marker--break">
-                    5
+                    {breakMin}
                   </span>
                 ) : (
                   <span className="track-marker track-marker--ghost" />

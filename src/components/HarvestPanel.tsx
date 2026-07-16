@@ -28,6 +28,7 @@ export function HarvestPanel({ stats, onClose }: HarvestPanelProps) {
     1,
     ...stats.last7Days.map((d) => d.tomatoes),
   )
+  const maxMonthTomatoes = Math.max(1, ...stats.monthDays.map((d) => d.tomatoes))
 
   return (
     <div
@@ -84,6 +85,36 @@ export function HarvestPanel({ stats, onClose }: HarvestPanelProps) {
               <span className="harvest-stat-number">{stats.weekJourneys}</span>
               <span className="harvest-stat-unit">journeys</span>
             </div>
+          </div>
+        </section>
+
+        <section className="harvest-section">
+          <h3 className="harvest-section-label">This month</h3>
+          <div className="harvest-stat-row">
+            <div className="harvest-stat-card">
+              <span className="harvest-stat-number">{stats.monthTomatoes}</span>
+              <span className="harvest-stat-unit">tomatoes</span>
+            </div>
+            <div className="harvest-stat-card">
+              <span className="harvest-stat-number">{stats.monthJourneys}</span>
+              <span className="harvest-stat-unit">journeys</span>
+            </div>
+          </div>
+          <div className="harvest-month-chart">
+            {stats.monthDays.map((day) => (
+              <div key={day.date} className="harvest-day-col harvest-day-col--month">
+                <div className="harvest-day-bar-wrap">
+                  <div
+                    className="harvest-day-bar"
+                    style={{ height: `${(day.tomatoes / maxMonthTomatoes) * 100}%` }}
+                  />
+                </div>
+                <span className="harvest-day-count">
+                  {day.tomatoes > 0 ? day.tomatoes : '·'}
+                </span>
+                <span className="harvest-day-label">{day.label}</span>
+              </div>
+            ))}
           </div>
         </section>
 
