@@ -29,6 +29,17 @@
   align-items: flex-start;
 }
 
+.top-bar-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.top-bar--focus .top-bar-actions {
+  align-items: center;
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -143,6 +154,99 @@
   margin: 2px 0 4px;
 }
 
+/* ── Focus overflow menu (⋯) ── */
+.focus-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.focus-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: var(--dark);
+  background: var(--glass);
+  border: 1.5px solid var(--border);
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.focus-menu-trigger:hover,
+.focus-menu-trigger--open {
+  background: var(--surface-strong);
+  border-color: var(--teal);
+}
+
+.focus-menu-trigger:active {
+  transform: scale(0.96);
+}
+
+.focus-menu-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 40;
+  min-width: 168px;
+  padding: 6px;
+  border-radius: 14px;
+  background: var(--surface-strong);
+  border: 1.5px solid var(--border);
+  box-shadow: 0 10px 32px var(--shadow-panel);
+  backdrop-filter: blur(12px);
+  animation: focus-menu-in 0.16s ease-out;
+}
+
+@keyframes focus-menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.focus-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--dark);
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.focus-menu-item:hover,
+.focus-menu-item:focus-visible {
+  background: var(--surface);
+}
+
+.focus-menu-item--harvest {
+  color: var(--orange-deep);
+}
+
+.focus-menu-badge {
+  margin-left: auto;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 50px;
+  background: var(--orange-deep);
+  color: white;
+  font-size: 0.62rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .journey-label {
   font-size: 0.65rem;
   font-weight: 700;
@@ -230,6 +334,18 @@
   font-size: 0.78rem;
   line-height: 1.25;
   max-width: 14rem;
+}
+
+.main-screen--focus .track-area {
+  flex: 1.15;
+}
+
+.main-screen--focus .timer-section {
+  padding-top: 2px;
+}
+
+.main-screen--focus .session-tracks {
+  gap: clamp(6px, 1.6vh, 12px);
 }
 
 /* ── Track area — 4 session lines ── */
@@ -884,6 +1000,22 @@
   padding: 8px 16px calc(12px + env(safe-area-inset-bottom));
   border-top: 1px solid var(--border-soft);
   background: var(--surface-muted);
+}
+
+.controls-bar--focus {
+  gap: 0;
+  padding: 6px 16px calc(10px + env(safe-area-inset-bottom));
+  background: transparent;
+  border-top-color: transparent;
+}
+
+.controls-bar--focus .controls-primary {
+  max-width: 320px;
+}
+
+.controls-bar--focus .btn {
+  padding: 14px 20px;
+  font-size: 1rem;
 }
 
 .controls-primary {

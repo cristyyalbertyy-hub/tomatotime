@@ -13,6 +13,7 @@ import { TimerRing } from './TimerRing'
 import { Confetti } from './Confetti'
 import { StudyTip } from './StudyTip'
 import { Studio9Link } from './Studio9Link'
+import { FocusMenu } from './FocusMenu'
 
 interface MainScreenProps {
   tomatoPos: TomatoPosition
@@ -29,7 +30,10 @@ interface MainScreenProps {
   status: TimerStatus
   celebrating: boolean
   inCycle: boolean
+  soundOn: boolean
   onOpenHarvest: () => void
+  onOpenSettings: () => void
+  onToggleSound: () => void
 }
 
 export function MainScreen({
@@ -45,10 +49,14 @@ export function MainScreen({
   status,
   celebrating,
   inCycle,
+  soundOn,
   onOpenHarvest,
+  onOpenSettings,
+  onToggleSound,
 }: MainScreenProps) {
   const { locale, t } = useLocale()
   const cycleHours = formatCycleHoursLocalized(locale, getCycleDurationMin())
+  const focusMode = inCycle && !celebrating
 
   const completedSessions = celebrating
     ? SESSIONS_PER_CYCLE
@@ -87,7 +95,7 @@ export function MainScreen({
   const showIdleExtras = !inCycle && !celebrating
 
   return (
-    <div className={`main-screen ${inCycle ? 'main-screen--focus' : ''}`}>
+    <div className={`main-screen ${focusMode ? 'main-screen--focus' : ''}`}>
       {celebrating && (
         <div className="journey-overlay" role="dialog" aria-live="assertive">
           <Confetti />
@@ -113,9 +121,9 @@ export function MainScreen({
         </div>
       )}
 
-      <header className={`top-bar ${inCycle ? 'top-bar--focus' : ''}`}>
+      <header className={`top-bar ${focusMode ? 'top-bar--focus' : ''}`}>
         <div className="brand">
-          {!inCycle && !celebrating && (
+          {showIdleExtras && (
             <h1 className="brand-title">
               <span className="brand-rest">T</span>
               <span className="brand-o">
@@ -128,47 +136,59 @@ export function MainScreen({
               <span className="brand-rest"> TIME</span>
             </h1>
           )}
-          {inCycle && !celebrating && (
+          {focusMode && (
             <p className="phase-label phase-label--inline">{phaseLabel}</p>
           )}
         </div>
 
-        <button
-          type="button"
-          className={`journey-counter ${inCycle ? 'journey-counter--compact' : ''}`}
-          onClick={onOpenHarvest}
-          aria-label={t('journey.aria', { count: journeys })}
-        >
-          {!inCycle && (
-            <>
-              <span className="journey-label">{t('journey.label')}</span>
-              <span className="journey-sublabel">
-                {todayTomatoes > 0
-                  ? t('journey.todayTomatoes', { count: todayTomatoes })
-                  : t('journey.cycles', { hours: cycleHours })}
-              </span>
-            </>
+        <div className="top-bar-actions">
+          <button
+            type="button"
+            className={`journey-counter ${focusMode ? 'journey-counter--compact' : ''}`}
+            onClick={onOpenHarvest}
+            aria-label={t('journey.aria', { count: journeys })}
+          >
+            {!focusMode && (
+              <>
+                <span className="journey-label">{t('journey.label')}</span>
+                <span className="journey-sublabel">
+                  {todayTomatoes > 0
+                    ? t('journey.todayTomatoes', { count: todayTomatoes })
+                    : t('journey.cycles', { hours: cycleHours })}
+                </span>
+              </>
+            )}
+            <span className="journey-count">{journeys}</span>
+            <div className="cycle-progress" aria-hidden="true">
+              {Array.from({ length: SESSIONS_PER_CYCLE }).map((_, i) => (
+                <span
+                  key={i}
+                  className={[
+                    'cycle-dot',
+                    i < completedSessions ? 'cycle-dot--done' : '',
+                    inCycle && i === activeSession ? 'cycle-dot--active' : '',
+                    celebrating ? 'cycle-dot--done' : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                />
+              ))}
+            </div>
+          </button>
+
+          {focusMode && (
+            <FocusMenu
+              soundOn={soundOn}
+              todayTomatoes={todayTomatoes}
+              onToggleSound={onToggleSound}
+              onOpenSettings={onOpenSettings}
+              onOpenHarvest={onOpenHarvest}
+            />
           )}
-          <span className="journey-count">{journeys}</span>
-          <div className="cycle-progress" aria-hidden="true">
-            {Array.from({ length: SESSIONS_PER_CYCLE }).map((_, i) => (
-              <span
-                key={i}
-                className={[
-                  'cycle-dot',
-                  i < completedSessions ? 'cycle-dot--done' : '',
-                  inCycle && i === activeSession ? 'cycle-dot--active' : '',
-                  celebrating ? 'cycle-dot--done' : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-              />
-            ))}
-          </div>
-        </button>
+        </div>
       </header>
 
-      {!inCycle && !celebrating && (
+      {showIdleExtras && (
         <p className="phase-label phase-label--idle">{phaseLabel}</p>
       )}
 
@@ -197,14 +217,14 @@ export function MainScreen({
 
       {showIdleExtras && <StudyTip />}
 
-      <div className="main-screen-footer">
-        <Studio9Link />
-        {showIdleExtras && (
+      {showIdleExtras && (
+        <div className="main-screen-footer">
+          <Studio9Link />
           <p className="keyboard-hint">
             <kbd>Space</kbd> {t('controls.keyboardHint')}
           </p>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

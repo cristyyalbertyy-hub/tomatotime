@@ -100,7 +100,7 @@ export default function App() {
   }, [screenshotScene, timer, sound.soundOn])
 
   return (
-    <div className="app">
+    <div className={`app ${timerProps.inCycle && !timerProps.celebrating ? 'app--focus' : ''}`}>
       <MainScreen
         tomatoPos={timerProps.tomatoPos}
         tomatoVisible={timerProps.tomatoVisible}
@@ -116,7 +116,10 @@ export default function App() {
         status={timerProps.status}
         celebrating={timerProps.celebrating}
         inCycle={timerProps.inCycle}
+        soundOn={sound.soundOn}
         onOpenHarvest={() => setShowHarvest(true)}
+        onOpenSettings={() => setShowSettings(true)}
+        onToggleSound={screenshotScene ? () => {} : sound.toggleSound}
       />
       <Controls
         status={timerProps.status}
