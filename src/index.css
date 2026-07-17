@@ -43,6 +43,18 @@
   --progress-teal-end: #4ecdc4;
   --panel-backdrop: rgba(249, 248, 246, 0.92);
   --btn-border-muted: rgba(61, 79, 95, 0.35);
+  --shadow-teal-btn: rgba(58, 173, 171, 0.4);
+  --shadow-orange-btn: rgba(245, 166, 35, 0.45);
+  --shadow-teal-cta: rgba(58, 173, 171, 0.45);
+  --chart-bg: rgba(255, 255, 255, 0.4);
+  --surface-interactive: rgba(255, 255, 255, 0.6);
+  --surface-interactive-strong: rgba(255, 255, 255, 0.85);
+  --study-border: rgba(58, 173, 171, 0.25);
+  --highlight-border: rgba(245, 166, 35, 0.4);
+  --note-warm-bg: rgba(245, 166, 35, 0.12);
+  --note-warm-border: rgba(245, 166, 35, 0.25);
+  --progress-teal-bg: rgba(58, 173, 171, 0.18);
+  --btn-reset-border: rgba(61, 79, 95, 0.3);
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --body-gradient:
@@ -88,6 +100,18 @@
   --progress-teal-end: #5ed9d6;
   --panel-backdrop: rgba(23, 31, 38, 0.94);
   --btn-border-muted: rgba(232, 238, 242, 0.22);
+  --shadow-teal-btn: rgba(78, 196, 194, 0.35);
+  --shadow-orange-btn: rgba(232, 147, 74, 0.38);
+  --shadow-teal-cta: rgba(78, 196, 194, 0.4);
+  --chart-bg: rgba(255, 255, 255, 0.06);
+  --surface-interactive: rgba(255, 255, 255, 0.08);
+  --surface-interactive-strong: rgba(255, 255, 255, 0.12);
+  --study-border: rgba(78, 196, 194, 0.28);
+  --highlight-border: rgba(232, 147, 74, 0.38);
+  --note-warm-bg: rgba(232, 147, 74, 0.14);
+  --note-warm-border: rgba(232, 147, 74, 0.28);
+  --progress-teal-bg: rgba(78, 196, 194, 0.2);
+  --btn-reset-border: rgba(232, 238, 242, 0.18);
   --body-gradient:
     radial-gradient(circle at 8% 7%, rgba(217, 122, 62, 0.1), transparent 26rem),
     radial-gradient(circle at 92% 20%, rgba(122, 155, 122, 0.12), transparent 22rem),

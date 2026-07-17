@@ -9,30 +9,23 @@ interface HarvestPanelProps {
   onClose: () => void
 }
 
-function TomatoRow({ count, max = 12 }: { count: number; max?: number }) {
-  if (count === 0) {
-    return <span className="harvest-empty">—</span>
-  }
-  const shown = Math.min(count, max)
+function TomatoCluster({ count, size = 22 }: { count: number; size?: number }) {
+  if (count === 0) return null
+  const shown = Math.min(count, 8)
   return (
-    <span className="harvest-tomato-row">
+    <span className="harvest-tomato-cluster">
       {Array.from({ length: shown }).map((_, i) => (
-        <Tomato key={i} mood="happy" size={18} />
+        <Tomato key={i} mood="happy" size={size} />
       ))}
-      {count > max && (
-        <span className="harvest-tomato-more">+{count - max}</span>
-      )}
+      {count > 8 && <span className="harvest-tomato-more">+{count - 8}</span>}
     </span>
   )
 }
 
 export function HarvestPanel({ stats, onClose }: HarvestPanelProps) {
   const { locale, t } = useLocale()
-  const maxWeekTomatoes = Math.max(
-    1,
-    ...stats.last7Days.map((d) => d.tomatoes),
-  )
-  const maxMonthTomatoes = Math.max(1, ...stats.monthDays.map((d) => d.tomatoes))
+  const maxWeekTomatoes = Math.max(1, ...stats.last7Days.map((d) => d.tomatoes))
+  const isEmpty = stats.totalTomatoes === 0
 
   const weekDays = stats.last7Days.map((day, index) => ({
     ...day,
@@ -67,96 +60,95 @@ export function HarvestPanel({ stats, onClose }: HarvestPanelProps) {
           </button>
         </header>
 
-        <section className="harvest-section">
-          <h3 className="harvest-section-label">{t('harvest.today')}</h3>
-          <div className="harvest-stat-card harvest-stat-card--highlight">
-            <TomatoRow count={stats.todayTomatoes} />
-            <p className="harvest-stat-number">
-              {t(
-                stats.todayTomatoes === 1 ? 'harvest.tomatoOne' : 'harvest.tomatoMany',
-                { n: stats.todayTomatoes },
-              )}
-            </p>
+        <div className="harvest-hero">
+          <div className="harvest-hero-main">
+            <TomatoCluster count={stats.todayTomatoes} size={26} />
+            <span className="harvest-hero-count">{stats.todayTomatoes}</span>
+            <span className="harvest-hero-label">{t('harvest.today')}</span>
             {stats.todayJourneys > 0 && (
-              <p className="harvest-stat-sub">
+              <span className="harvest-hero-sub">
                 {t(
                   stats.todayJourneys === 1
                     ? 'harvest.journeyTodayOne'
                     : 'harvest.journeyTodayMany',
                   { n: stats.todayJourneys },
                 )}
-              </p>
+              </span>
             )}
           </div>
-        </section>
 
-        <section className="harvest-section">
-          <h3 className="harvest-section-label">{t('harvest.thisWeek')}</h3>
-          <div className="harvest-stat-row">
-            <div className="harvest-stat-card">
-              <span className="harvest-stat-number">{stats.weekTomatoes}</span>
-              <span className="harvest-stat-unit">{t('harvest.unitTomatoes')}</span>
+          {stats.streak > 0 && (
+            <div className="harvest-streak-badge" aria-label={`${stats.streak} ${t('harvest.dayStreak')}`}>
+              <span className="harvest-streak-count">{stats.streak}</span>
+              <span className="harvest-streak-label">{t('harvest.dayStreak')}</span>
             </div>
-            <div className="harvest-stat-card">
-              <span className="harvest-stat-number">{stats.weekJourneys}</span>
-              <span className="harvest-stat-unit">{t('harvest.unitJourneys')}</span>
-            </div>
-          </div>
-        </section>
+          )}
+        </div>
 
-        <section className="harvest-section">
-          <h3 className="harvest-section-label">{t('harvest.thisMonth')}</h3>
-          <div className="harvest-stat-row">
-            <div className="harvest-stat-card">
-              <span className="harvest-stat-number">{stats.monthTomatoes}</span>
-              <span className="harvest-stat-unit">{t('harvest.unitTomatoes')}</span>
-            </div>
-            <div className="harvest-stat-card">
-              <span className="harvest-stat-number">{stats.monthJourneys}</span>
-              <span className="harvest-stat-unit">{t('harvest.unitJourneys')}</span>
-            </div>
-          </div>
-          <div className="harvest-month-chart">
-            {stats.monthDays.map((day) => (
-              <div key={day.date} className="harvest-day-col harvest-day-col--month">
-                <div className="harvest-day-bar-wrap">
-                  <div
-                    className="harvest-day-bar"
-                    style={{ height: `${(day.tomatoes / maxMonthTomatoes) * 100}%` }}
-                  />
-                </div>
-                <span className="harvest-day-count">
-                  {day.tomatoes > 0 ? day.tomatoes : '·'}
-                </span>
-                <span className="harvest-day-label">{day.label}</span>
-              </div>
-            ))}
-          </div>
-        </section>
+        {isEmpty && (
+          <p className="harvest-empty-state">{t('harvest.empty')}</p>
+        )}
 
         <section className="harvest-section">
           <h3 className="harvest-section-label">{t('harvest.last7Days')}</h3>
-          <div className="harvest-week-chart">
+          <div className="harvest-week-chart harvest-week-chart--hero">
             {weekDays.map((day) => (
-              <div key={day.date} className="harvest-day-col">
+              <div
+                key={day.date}
+                className={[
+                  'harvest-day-col',
+                  day.tomatoes > 0 ? 'harvest-day-col--active' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+              >
                 <div className="harvest-day-bar-wrap">
                   <div
                     className="harvest-day-bar"
                     style={{
-                      height: `${(day.tomatoes / maxWeekTomatoes) * 100}%`,
+                      height: `${Math.max(day.tomatoes > 0 ? 12 : 0, (day.tomatoes / maxWeekTomatoes) * 100)}%`,
                     }}
                   />
                 </div>
-                <span className="harvest-day-count">
-                  {day.tomatoes > 0 ? day.tomatoes : '·'}
-                </span>
+                {day.tomatoes > 0 && (
+                  <span className="harvest-day-tomato" aria-hidden="true">
+                    <Tomato mood="happy" size={14} />
+                  </span>
+                )}
                 <span className="harvest-day-label">{day.label}</span>
               </div>
             ))}
           </div>
+          <p className="harvest-summary-pill">
+            {t('harvest.weekPill', {
+              tomatoes: stats.weekTomatoes,
+              journeys: stats.weekJourneys,
+            })}
+          </p>
+        </section>
+
+        <section className="harvest-section">
+          <h3 className="harvest-section-label">{t('harvest.thisMonth')}</h3>
+          <p className="harvest-summary-pill harvest-summary-pill--month">
+            {t('harvest.monthPill', {
+              tomatoes: stats.monthTomatoes,
+              journeys: stats.monthJourneys,
+            })}
+          </p>
         </section>
 
         <section className="harvest-section harvest-section--footer">
+          <div className="harvest-totals">
+            <div className="harvest-total-chip">
+              <Tomato mood="happy" size={16} />
+              <span className="harvest-total-value">{stats.totalTomatoes}</span>
+              <span className="harvest-total-label">{t('harvest.allTime')}</span>
+            </div>
+            <div className="harvest-total-chip">
+              <span className="harvest-total-value">{stats.totalJourneys}</span>
+              <span className="harvest-total-label">{t('harvest.unitJourneys')}</span>
+            </div>
+          </div>
           <div className="harvest-export-row">
             <button type="button" className="harvest-export-btn" onClick={exportHarvestCsv}>
               {t('harvest.exportCsv')}
@@ -164,20 +156,6 @@ export function HarvestPanel({ stats, onClose }: HarvestPanelProps) {
             <button type="button" className="harvest-export-btn" onClick={exportHarvestJson}>
               {t('harvest.exportJson')}
             </button>
-          </div>
-          <div className="harvest-stat-row">
-            <div className="harvest-stat-card harvest-stat-card--compact">
-              <span className="harvest-stat-number">{stats.streak}</span>
-              <span className="harvest-stat-unit">{t('harvest.dayStreak')}</span>
-            </div>
-            <div className="harvest-stat-card harvest-stat-card--compact">
-              <span className="harvest-stat-number">{stats.totalTomatoes}</span>
-              <span className="harvest-stat-unit">{t('harvest.allTime')} 🍅</span>
-            </div>
-            <div className="harvest-stat-card harvest-stat-card--compact">
-              <span className="harvest-stat-number">{stats.totalJourneys}</span>
-              <span className="harvest-stat-unit">{t('harvest.unitJourneys')}</span>
-            </div>
           </div>
         </section>
       </div>

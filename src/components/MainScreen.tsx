@@ -254,6 +254,7 @@ export function MainScreen({
             elapsedSec={elapsedSec}
             phaseProgress={phaseProgress}
             isRunning={isRunning}
+            isPaused={isPaused}
           />
         </div>
       )}

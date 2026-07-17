@@ -150,6 +150,9 @@ const en = {
   'harvest.unitJourneys': 'journeys',
   'harvest.dayStreak': 'day streak',
   'harvest.allTime': 'all-time',
+  'harvest.empty': 'No tomatoes yet — start a journey to fill your harvest.',
+  'harvest.weekPill': '{tomatoes} tomatoes · {journeys} journeys',
+  'harvest.monthPill': '{tomatoes} tomatoes · {journeys} journeys',
   'harvest.exportCsv': 'Export CSV',
   'harvest.exportJson': 'Export JSON',
 } as const
@@ -241,6 +244,9 @@ const pt: Record<keyof typeof en, string> = {
   'harvest.unitJourneys': 'jornadas',
   'harvest.dayStreak': 'dias seguidos',
   'harvest.allTime': 'total',
+  'harvest.empty': 'Ainda sem tomates — começa uma jornada para encher a colheita.',
+  'harvest.weekPill': '{tomatoes} tomates · {journeys} jornadas',
+  'harvest.monthPill': '{tomatoes} tomates · {journeys} jornadas',
   'harvest.exportCsv': 'Exportar CSV',
   'harvest.exportJson': 'Exportar JSON',
 }
@@ -332,6 +338,9 @@ const fr: Record<keyof typeof en, string> = {
   'harvest.unitJourneys': 'parcours',
   'harvest.dayStreak': 'jours d’affilée',
   'harvest.allTime': 'total',
+  'harvest.empty': 'Pas encore de tomates — commencez un parcours pour remplir votre récolte.',
+  'harvest.weekPill': '{tomatoes} tomates · {journeys} parcours',
+  'harvest.monthPill': '{tomatoes} tomates · {journeys} parcours',
   'harvest.exportCsv': 'Exporter CSV',
   'harvest.exportJson': 'Exporter JSON',
 }
@@ -423,6 +432,9 @@ const es: Record<keyof typeof en, string> = {
   'harvest.unitJourneys': 'recorridos',
   'harvest.dayStreak': 'días seguidos',
   'harvest.allTime': 'total',
+  'harvest.empty': 'Aún no hay tomates — inicia un recorrido para llenar tu cosecha.',
+  'harvest.weekPill': '{tomatoes} tomates · {journeys} recorridos',
+  'harvest.monthPill': '{tomatoes} tomates · {journeys} recorridos',
   'harvest.exportCsv': 'Exportar CSV',
   'harvest.exportJson': 'Exportar JSON',
 }
@@ -514,6 +526,9 @@ const it: Record<keyof typeof en, string> = {
   'harvest.unitJourneys': 'percorsi',
   'harvest.dayStreak': 'giorni di fila',
   'harvest.allTime': 'totale',
+  'harvest.empty': 'Nessun pomodoro ancora — inizia un percorso per riempire la raccolta.',
+  'harvest.weekPill': '{tomatoes} pomodori · {journeys} percorsi',
+  'harvest.monthPill': '{tomatoes} pomodori · {journeys} percorsi',
   'harvest.exportCsv': 'Esporta CSV',
   'harvest.exportJson': 'Esporta JSON',
 }
