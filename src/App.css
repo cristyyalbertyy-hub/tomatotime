@@ -1901,6 +1901,48 @@
   color: var(--teal);
 }
 
+.settings-tomato-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.settings-tomato-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+}
+
+.settings-tomato-btn--active {
+  background: var(--progress-teal-bg);
+  border-color: var(--teal);
+}
+
+.settings-tomato-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.65);
+}
+
+.settings-tomato-btn-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--dark);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.settings-tomato-btn--active .settings-tomato-btn-label {
+  color: var(--teal);
+}
+
 .harvest-export-row {
   display: flex;
   gap: 10px;

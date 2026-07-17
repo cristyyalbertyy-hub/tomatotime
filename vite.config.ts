@@ -40,6 +40,12 @@ export default defineConfig({
             icons: [{ src: '/icon-192.png', sizes: '192x192' }],
           },
           {
+            name: 'Continue journey',
+            short_name: 'Continue',
+            url: '/?continue=1',
+            icons: [{ src: '/icon-192.png', sizes: '192x192' }],
+          },
+          {
             name: 'Harvest stats',
             short_name: 'Harvest',
             url: '/?harvest=1',

@@ -1,10 +1,10 @@
 {
   "name": "Tomato Time",
   "short_name": "Tomato Time",
-  "description": "Pomodoro focus timer for Studio9 Medical Science — 4×25 min journeys with breaks.",
+  "description": "Pomodoro focus timer for Studio9 Medical Science — 4-session journeys with breaks.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#d8f0f5",
+  "background_color": "#f9f8f6",
   "theme_color": "#3aadab",
   "orientation": "portrait",
   "icons": [
@@ -19,6 +19,26 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Start journey",
+      "short_name": "Start",
+      "url": "/",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Continue journey",
+      "short_name": "Continue",
+      "url": "/?continue=1",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Harvest stats",
+      "short_name": "Harvest",
+      "url": "/?harvest=1",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
     }
   ]
 }

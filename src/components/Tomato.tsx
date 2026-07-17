@@ -11,11 +11,7 @@ interface TomatoProps {
   size?: number
 }
 
-const TOMATO = '#f5a623'
-const TOMATO_DEEP = '#e8890c'
-const TOMATO_LIGHT = '#ffd56a'
-const TOMATO_BLUSH = '#ffb74d'
-const ORANGE_LIGHT = '#ffd56a'
+const ORANGE_LIGHT = 'var(--tomato-light, #ffd56a)'
 const TEAL = '#3aadab'
 const TEAL_LIGHT = '#5ec4c2'
 const INK = '#3d4f5f'
@@ -42,20 +38,20 @@ export function Tomato({ mood = 'happy', size = 48 }: TomatoProps) {
       />
 
       {/* Body — round & chubby */}
-      <ellipse cx="32" cy="38" rx="24" ry="22" fill={TOMATO_DEEP} />
-      <ellipse cx="32" cy="36" rx="22" ry="20" fill={TOMATO} />
+      <ellipse cx="32" cy="38" rx="24" ry="22" fill="var(--tomato-deep, #e8890c)" />
+      <ellipse cx="32" cy="36" rx="22" ry="20" fill="var(--tomato-body, #f5a623)" />
       <ellipse
         cx="24"
         cy="30"
         rx="8"
         ry="6"
-        fill={TOMATO_LIGHT}
+        fill="var(--tomato-light, #ffd56a)"
         opacity="0.45"
       />
 
       {/* Cheeks */}
-      <ellipse cx="16" cy="40" rx="5" ry="3.5" fill={TOMATO_BLUSH} opacity="0.55" />
-      <ellipse cx="48" cy="40" rx="5" ry="3.5" fill={TOMATO_BLUSH} opacity="0.55" />
+      <ellipse cx="16" cy="40" rx="5" ry="3.5" fill="var(--tomato-blush, #ffb74d)" opacity="0.55" />
+      <ellipse cx="48" cy="40" rx="5" ry="3.5" fill="var(--tomato-blush, #ffb74d)" opacity="0.55" />
 
       <Face mood={mood} />
     </svg>

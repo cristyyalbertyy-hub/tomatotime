@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { usePomodoroTimer } from './hooks/usePomodoroTimer'
 import { useSoundSettings } from './hooks/useSoundSettings'
+import { useTomatoColor } from './hooks/useTomatoColor'
 import { useHarvest } from './hooks/useHarvest'
 import { useSettings } from './hooks/useSettings'
 import { useOnboarding } from './hooks/useOnboarding'
@@ -22,12 +23,14 @@ export default function App() {
   const screenshotScene = getScreenshotScene()
   const timer = usePomodoroTimer()
   const sound = useSoundSettings()
+  const tomatoColor = useTomatoColor()
   const harvest = useHarvest()
   const settings = useSettings()
   const onboarding = useOnboarding()
   const [showHarvest, setShowHarvest] = useState(screenshotScene === 'harvest')
   const [showSettings, setShowSettings] = useState(false)
   const [resetConfirm, setResetConfirm] = useState(false)
+  const continueHandled = useRef(false)
 
   const demo = screenshotScene ? getDemoTimerProps(screenshotScene) : null
   const demoHarvest = screenshotScene ? getDemoHarvestStats() : null
@@ -54,6 +57,28 @@ export default function App() {
     const params = new URLSearchParams(window.location.search)
     if (params.get('harvest') === '1') setShowHarvest(true)
   }, [screenshotScene])
+
+  useEffect(() => {
+    if (screenshotScene || continueHandled.current) return
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('continue') !== '1') return
+
+    continueHandled.current = true
+    params.delete('continue')
+    const query = params.toString()
+    const nextUrl = query
+      ? `${window.location.pathname}?${query}`
+      : window.location.pathname
+    window.history.replaceState(null, '', nextUrl)
+
+    if (timer.inCycle && timer.status === 'paused') {
+      void (async () => {
+        if (sound.soundOn) await unlockAudio()
+        void requestWebNotificationPermission()
+        timer.go()
+      })()
+    }
+  }, [screenshotScene, timer.inCycle, timer.status, timer.go, sound.soundOn])
 
   useEffect(() => {
     if (screenshotScene || !sound.soundOn) return
@@ -149,10 +174,14 @@ export default function App() {
           workMin={settings.workMin}
           breakMin={settings.breakMin}
           theme={settings.theme}
+          soundPreset={sound.soundPreset}
+          tomatoColor={tomatoColor.tomatoColor}
           locked={settingsLocked}
           onChangeWork={settings.updateWorkMin}
           onChangeBreak={settings.updateBreakMin}
           onChangeTheme={settings.updateTheme}
+          onChangeSoundPreset={sound.setSoundPreset}
+          onChangeTomatoColor={tomatoColor.setTomatoColor}
           onClose={() => setShowSettings(false)}
         />
       )}

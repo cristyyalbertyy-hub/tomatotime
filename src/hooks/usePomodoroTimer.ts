@@ -97,7 +97,10 @@ function applyReconcileSideEffects(result: ReturnType<typeof reconcileTimerState
     recordTomatoHarvest()
   }
   if (result.journeyCompleted) recordJourneyHarvest()
-  playPhaseTransitionSound(result.phaseTransition)
+  if (result.phaseTransition) {
+    playPhaseTransitionSound(result.phaseTransition)
+    void import('../utils/haptics').then(({ hapticSessionEnd }) => hapticSessionEnd())
+  }
 }
 
 export function usePomodoroTimer(): UsePomodoroTimerReturn {

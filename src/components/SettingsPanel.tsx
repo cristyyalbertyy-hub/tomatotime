@@ -6,16 +6,23 @@ import {
 } from '../utils/settings'
 import { SESSIONS_PER_CYCLE } from '../constants'
 import type { ThemePreference } from '../utils/theme'
+import type { SoundPreset } from '../utils/sound'
+import type { TomatoColorPreset } from '../utils/tomatoColor'
+import { getTomatoSwatchColor } from '../utils/tomatoColor'
 import { useLocale } from '../hooks/useLocale'
 
 interface SettingsPanelProps {
   workMin: number
   breakMin: number
   theme: ThemePreference
+  soundPreset: SoundPreset
+  tomatoColor: TomatoColorPreset
   locked: boolean
   onChangeWork: (minutes: number) => void
   onChangeBreak: (minutes: number) => void
   onChangeTheme: (theme: ThemePreference) => void
+  onChangeSoundPreset: (preset: SoundPreset) => void
+  onChangeTomatoColor: (preset: TomatoColorPreset) => void
   onClose: () => void
 }
 
@@ -23,6 +30,24 @@ const THEME_OPTIONS: { id: ThemePreference; labelKey: 'settings.themeLight' | 's
   { id: 'light', labelKey: 'settings.themeLight' },
   { id: 'dark', labelKey: 'settings.themeDark' },
   { id: 'system', labelKey: 'settings.themeSystem' },
+]
+
+const SOUND_PRESET_OPTIONS: {
+  id: SoundPreset
+  labelKey: 'settings.soundBloom' | 'settings.soundChirp' | 'settings.soundBell'
+}[] = [
+  { id: 'bloom', labelKey: 'settings.soundBloom' },
+  { id: 'chirp', labelKey: 'settings.soundChirp' },
+  { id: 'bell', labelKey: 'settings.soundBell' },
+]
+
+const TOMATO_COLOR_OPTIONS: {
+  id: TomatoColorPreset
+  labelKey: 'settings.tomatoClassic' | 'settings.tomatoCherry' | 'settings.tomatoGolden'
+}[] = [
+  { id: 'classic', labelKey: 'settings.tomatoClassic' },
+  { id: 'cherry', labelKey: 'settings.tomatoCherry' },
+  { id: 'golden', labelKey: 'settings.tomatoGolden' },
 ]
 
 const LOCALE_OPTIONS: {
@@ -45,10 +70,14 @@ export function SettingsPanel({
   workMin,
   breakMin,
   theme,
+  soundPreset,
+  tomatoColor,
   locked,
   onChangeWork,
   onChangeBreak,
   onChangeTheme,
+  onChangeSoundPreset,
+  onChangeTomatoColor,
   onClose,
 }: SettingsPanelProps) {
   const { locale, setLocale, t } = useLocale()
@@ -117,6 +146,46 @@ export function SettingsPanel({
               onChange={(e) => onChangeBreak(Number(e.target.value))}
             />
             <span className="settings-value">{t('settings.min', { n: breakMin })}</span>
+          </div>
+        </div>
+
+        <div className="settings-field">
+          <span className="settings-label">{t('settings.soundPreset')}</span>
+          <div className="settings-theme-row" role="group" aria-label={t('settings.soundPreset')}>
+            {SOUND_PRESET_OPTIONS.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                className={`settings-theme-btn ${soundPreset === option.id ? 'settings-theme-btn--active' : ''}`}
+                aria-pressed={soundPreset === option.id}
+                onClick={() => onChangeSoundPreset(option.id)}
+              >
+                {t(option.labelKey)}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="settings-field">
+          <span className="settings-label">{t('settings.tomatoColor')}</span>
+          <div className="settings-tomato-row" role="group" aria-label={t('settings.tomatoColor')}>
+            {TOMATO_COLOR_OPTIONS.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                className={`settings-tomato-btn ${tomatoColor === option.id ? 'settings-tomato-btn--active' : ''}`}
+                aria-pressed={tomatoColor === option.id}
+                aria-label={t(option.labelKey)}
+                title={t(option.labelKey)}
+                onClick={() => onChangeTomatoColor(option.id)}
+              >
+                <span
+                  className="settings-tomato-swatch"
+                  style={{ background: getTomatoSwatchColor(option.id) }}
+                />
+                <span className="settings-tomato-btn-label">{t(option.labelKey)}</span>
+              </button>
+            ))}
           </div>
         </div>
 
