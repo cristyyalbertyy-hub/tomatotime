@@ -2,9 +2,10 @@ import type { Phase } from '../constants'
 import type { TomatoPosition } from '../types'
 import { SESSIONS_PER_CYCLE } from '../constants'
 import { getBreakDurationMin, getWorkDurationMin } from '../utils/settings'
+import { useLocale } from '../hooks/useLocale'
 import { Tomato, type TomatoMood } from './Tomato'
 
-const SESSION_LABELS = ['I', 'II', 'III', 'IV']
+const SESSION_LABELS = ['1', '2', '3', '4']
 
 interface SessionTracksProps {
   sessionIndex: number
@@ -57,11 +58,12 @@ export function SessionTracks({
   celebrating,
   inCycle,
 }: SessionTracksProps) {
+  const { t } = useLocale()
   const workMin = getWorkDurationMin()
   const breakMin = getBreakDurationMin()
 
   return (
-    <div className="session-tracks" aria-label="Four session tracks">
+    <div className="session-tracks" aria-label={t('session.aria')}>
       {Array.from({ length: SESSIONS_PER_CYCLE }).map((_, i) => {
         const rowState = getRowState(
           i,
@@ -77,6 +79,7 @@ export function SessionTracks({
           tomatoPos,
           celebrating,
         )
+        const atLineEnd = progress >= 99
         const showTomato =
           tomatoVisible &&
           !celebrating &&
@@ -92,13 +95,16 @@ export function SessionTracks({
             className={[
               'session-track',
               `session-track--${rowState}`,
-            ].join(' ')}
+              atLineEnd && showTomato ? 'session-track--line-end' : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
           >
             <span className="session-track-label">{SESSION_LABELS[i]}</span>
 
             <div className="session-track-body">
               {rowState === 'break' && (
-                <span className="session-track-break-tag">Break</span>
+                <span className="session-track-break-tag">{t('session.break')}</span>
               )}
 
               <div className="track-wrap">
@@ -131,6 +137,7 @@ export function SessionTracks({
                           `tomato-on-track--${tomatoMood}`,
                           tomatoPos.x <= 4 ? 'tomato-on-track--edge-start' : '',
                           tomatoPos.x >= 96 ? 'tomato-on-track--edge-end' : '',
+                          atLineEnd ? 'tomato-on-track--landing' : '',
                         ]
                           .filter(Boolean)
                           .join(' ')}
@@ -146,6 +153,7 @@ export function SessionTracks({
                       'track-line',
                       rowState === 'break' ? 'track-line--break' : '',
                       rowState === 'done' ? 'track-line--done' : '',
+                      atLineEnd && showTomato ? 'track-line--finishing' : '',
                     ]
                       .filter(Boolean)
                       .join(' ')}
@@ -165,7 +173,7 @@ export function SessionTracks({
                   {rowState === 'done' && (
                     <div
                       className="session-track-mini-tomato"
-                      aria-label={`Session ${i + 1} complete`}
+                      aria-label={t('session.complete', { n: i + 1 })}
                     >
                       <Tomato mood="happy" size={30} />
                     </div>

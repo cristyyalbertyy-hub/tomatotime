@@ -2,9 +2,11 @@ import type { Phase } from '../constants'
 import type { TomatoPosition, TimerStatus } from '../types'
 import { MEDICAL_SITE_URL, SESSIONS_PER_CYCLE } from '../constants'
 import {
-  formatCycleHours,
+  getCycleDurationMin,
   getWorkDurationSec,
 } from '../utils/settings'
+import { formatCycleHoursLocalized } from '../i18n/messages'
+import { useLocale } from '../hooks/useLocale'
 import { Tomato } from './Tomato'
 import { SessionTracks } from './SessionTracks'
 import { TimerRing } from './TimerRing'
@@ -27,6 +29,7 @@ interface MainScreenProps {
   status: TimerStatus
   celebrating: boolean
   inCycle: boolean
+  onOpenHarvest: () => void
 }
 
 export function MainScreen({
@@ -42,7 +45,11 @@ export function MainScreen({
   status,
   celebrating,
   inCycle,
+  onOpenHarvest,
 }: MainScreenProps) {
+  const { locale, t } = useLocale()
+  const cycleHours = formatCycleHoursLocalized(locale, getCycleDurationMin())
+
   const completedSessions = celebrating
     ? SESSIONS_PER_CYCLE
     : phase === 'work'
@@ -64,26 +71,35 @@ export function MainScreen({
             : 'happy'
 
   const phaseLabel = celebrating
-    ? 'Journey complete!'
+    ? t('phase.journeyComplete')
     : phase === 'work'
-      ? `Focus · Session ${sessionIndex + 1} of ${SESSIONS_PER_CYCLE}`
+      ? t('phase.focusSession', {
+          current: sessionIndex + 1,
+          total: SESSIONS_PER_CYCLE,
+        })
       : phase === 'break'
-        ? `Break · Session ${sessionIndex + 1} of ${SESSIONS_PER_CYCLE}`
-        : `Ready for a ${formatCycleHours()} journey`
+        ? t('phase.breakSession', {
+            current: sessionIndex + 1,
+            total: SESSIONS_PER_CYCLE,
+          })
+        : t('phase.readyJourney', { hours: cycleHours })
 
   const showIdleExtras = !inCycle && !celebrating
 
   return (
-    <div className="main-screen">
+    <div className={`main-screen ${inCycle ? 'main-screen--focus' : ''}`}>
       {celebrating && (
         <div className="journey-overlay" role="dialog" aria-live="assertive">
           <Confetti />
           <div className="journey-overlay-content">
             <Tomato mood="celebrate" size={100} />
-            <h2 className="journey-overlay-title">Journey Complete!</h2>
+            <h2 className="journey-overlay-title">{t('journey.overlayTitle')}</h2>
             <p className="journey-overlay-sub">
-              {formatCycleHours()} cycle done · {journeys} journey
-              {journeys !== 1 ? 's' : ''} total
+              {t('journey.overlaySub', {
+                hours: cycleHours,
+                count: journeys,
+                plural: journeys !== 1 ? 's' : '',
+              })}
             </p>
             <a
               className="journey-overlay-cta"
@@ -91,7 +107,7 @@ export function MainScreen({
               target="_blank"
               rel="noopener noreferrer"
             >
-              Open Studio9 · Medical Science
+              {t('journey.overlayCta')}
             </a>
           </div>
         </div>
@@ -117,18 +133,24 @@ export function MainScreen({
           )}
         </div>
 
-        <aside
-          className="journey-counter"
-          aria-label="Completed 2 hour tomato journeys"
+        <button
+          type="button"
+          className={`journey-counter ${inCycle ? 'journey-counter--compact' : ''}`}
+          onClick={onOpenHarvest}
+          aria-label={t('journey.aria', { count: journeys })}
         >
-          <span className="journey-label">Journeys</span>
-          <span className="journey-sublabel">
-            {todayTomatoes > 0
-              ? `${todayTomatoes} 🍅 today`
-              : `${formatCycleHours()} cycles`}
-          </span>
+          {!inCycle && (
+            <>
+              <span className="journey-label">{t('journey.label')}</span>
+              <span className="journey-sublabel">
+                {todayTomatoes > 0
+                  ? t('journey.todayTomatoes', { count: todayTomatoes })
+                  : t('journey.cycles', { hours: cycleHours })}
+              </span>
+            </>
+          )}
           <span className="journey-count">{journeys}</span>
-          <div className="cycle-progress" aria-label="Current cycle progress">
+          <div className="cycle-progress" aria-hidden="true">
             {Array.from({ length: SESSIONS_PER_CYCLE }).map((_, i) => (
               <span
                 key={i}
@@ -143,11 +165,11 @@ export function MainScreen({
               />
             ))}
           </div>
-        </aside>
+        </button>
       </header>
 
       {!inCycle && !celebrating && (
-        <p className="phase-label">{phaseLabel}</p>
+        <p className="phase-label phase-label--idle">{phaseLabel}</p>
       )}
 
       <div className="track-area">
@@ -179,7 +201,7 @@ export function MainScreen({
         <Studio9Link />
         {showIdleExtras && (
           <p className="keyboard-hint">
-            <kbd>Space</kbd> start / pause
+            <kbd>Space</kbd> {t('controls.keyboardHint')}
           </p>
         )}
       </div>

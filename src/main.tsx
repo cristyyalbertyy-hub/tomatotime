@@ -4,9 +4,11 @@ import { registerSW } from 'virtual:pwa-register'
 import App from './App'
 import { initNotifications } from './utils/notifications'
 import { initTheme } from './utils/theme'
+import { getLocale } from './i18n/messages'
 import './index.css'
 
 initTheme()
+document.documentElement.lang = getLocale() === 'pt' ? 'pt' : 'en'
 void initNotifications()
 
 registerSW({ immediate: true })

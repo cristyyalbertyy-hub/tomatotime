@@ -116,6 +116,7 @@ export default function App() {
         status={timerProps.status}
         celebrating={timerProps.celebrating}
         inCycle={timerProps.inCycle}
+        onOpenHarvest={() => setShowHarvest(true)}
       />
       <Controls
         status={timerProps.status}
