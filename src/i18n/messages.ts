@@ -56,11 +56,19 @@ export function journeyPluralSuffix(locale: Locale, count: number): string {
   return 's'
 }
 
+export function formatWeekdayLabel(locale: Locale, dateKey: string): string {
+  const [y, m, d] = dateKey.split('-').map(Number)
+  return new Date(y, m - 1, d).toLocaleDateString(getHtmlLang(locale), {
+    weekday: 'short',
+  })
+}
+
 const en = {
   'phase.focusSession': 'Focus · Session {current} of {total}',
   'phase.breakSession': 'Break · Session {current} of {total}',
   'phase.readyJourney': 'Ready for a {hours} journey',
   'phase.journeyComplete': 'Journey complete!',
+  'phase.paused': 'Paused',
   'journey.label': 'Journeys',
   'journey.todayTomatoes': '{count} today',
   'journey.cycles': '{hours} cycles',
@@ -83,6 +91,7 @@ const en = {
   'controls.settings': 'Settings',
   'controls.harvest': 'Harvest',
   'controls.go': 'Go',
+  'controls.continue': 'Continue',
   'controls.pause': 'Pause',
   'controls.reset': 'Reset',
   'controls.resetConfirm': 'Reset this journey?',
@@ -113,6 +122,36 @@ const en = {
   'hours.plural': '{n} hours',
   'hours.oneDecimal': '{n} hours',
   'hours.minutes': '{n} min',
+  'studyTip.label': 'Tip',
+  'onboarding.title': 'Welcome to Tomato Time',
+  'onboarding.lead': 'A Pomodoro journey for deep study — built for Studio9 Medical Science.',
+  'onboarding.step1':
+    '4 focus sessions — your tomato travels one track per session ({work} min each by default).',
+  'onboarding.step2':
+    'Short breaks — {break} min to stretch, hydrate, and reset between sessions.',
+  'onboarding.step3':
+    'One journey — about {hours} of focused study, then celebrate and harvest your tomatoes.',
+  'onboarding.step4':
+    'Sound & alerts — allow notifications so you hear when a session ends, even in another app.',
+  'onboarding.start': 'Start my first journey',
+  'onboarding.settings': 'Adjust times first',
+  'harvest.title': 'Harvest',
+  'harvest.tagline': 'One tomato at a time',
+  'harvest.close': 'Close harvest',
+  'harvest.today': 'Today',
+  'harvest.tomatoOne': '{n} tomato',
+  'harvest.tomatoMany': '{n} tomatoes',
+  'harvest.journeyTodayOne': '{n} journey today',
+  'harvest.journeyTodayMany': '{n} journeys today',
+  'harvest.thisWeek': 'This week',
+  'harvest.thisMonth': 'This month',
+  'harvest.last7Days': 'Last 7 days',
+  'harvest.unitTomatoes': 'tomatoes',
+  'harvest.unitJourneys': 'journeys',
+  'harvest.dayStreak': 'day streak',
+  'harvest.allTime': 'all-time',
+  'harvest.exportCsv': 'Export CSV',
+  'harvest.exportJson': 'Export JSON',
 } as const
 
 const pt: Record<keyof typeof en, string> = {
@@ -120,6 +159,7 @@ const pt: Record<keyof typeof en, string> = {
   'phase.breakSession': 'Pausa · Sessão {current} de {total}',
   'phase.readyJourney': 'Pronto para uma jornada de {hours}',
   'phase.journeyComplete': 'Jornada concluída!',
+  'phase.paused': 'Em pausa',
   'journey.label': 'Jornadas',
   'journey.todayTomatoes': '{count} hoje',
   'journey.cycles': 'ciclos de {hours}',
@@ -142,6 +182,7 @@ const pt: Record<keyof typeof en, string> = {
   'controls.settings': 'Definições',
   'controls.harvest': 'Colheita',
   'controls.go': 'Ir',
+  'controls.continue': 'Continuar',
   'controls.pause': 'Pausar',
   'controls.reset': 'Repor',
   'controls.resetConfirm': 'Repor esta jornada?',
@@ -172,6 +213,36 @@ const pt: Record<keyof typeof en, string> = {
   'hours.plural': '{n} horas',
   'hours.oneDecimal': '{n} horas',
   'hours.minutes': '{n} min',
+  'studyTip.label': 'Dica',
+  'onboarding.title': 'Bem-vindo ao Tomato Time',
+  'onboarding.lead': 'Uma jornada Pomodoro para estudo profundo — criada para Studio9 Medical Science.',
+  'onboarding.step1':
+    '4 sessões de foco — o tomate percorre uma linha por sessão ({work} min cada, por defeito).',
+  'onboarding.step2':
+    'Pausas curtas — {break} min para te alongares, hidratares e recomeçares entre sessões.',
+  'onboarding.step3':
+    'Uma jornada — cerca de {hours} de estudo focado, depois celebra e colhe os teus tomates.',
+  'onboarding.step4':
+    'Som e alertas — permite notificações para ouvires quando uma sessão termina, mesmo noutra app.',
+  'onboarding.start': 'Começar a minha primeira jornada',
+  'onboarding.settings': 'Ajustar tempos primeiro',
+  'harvest.title': 'Colheita',
+  'harvest.tagline': 'Um tomate de cada vez',
+  'harvest.close': 'Fechar colheita',
+  'harvest.today': 'Hoje',
+  'harvest.tomatoOne': '{n} tomate',
+  'harvest.tomatoMany': '{n} tomates',
+  'harvest.journeyTodayOne': '{n} jornada hoje',
+  'harvest.journeyTodayMany': '{n} jornadas hoje',
+  'harvest.thisWeek': 'Esta semana',
+  'harvest.thisMonth': 'Este mês',
+  'harvest.last7Days': 'Últimos 7 dias',
+  'harvest.unitTomatoes': 'tomates',
+  'harvest.unitJourneys': 'jornadas',
+  'harvest.dayStreak': 'dias seguidos',
+  'harvest.allTime': 'total',
+  'harvest.exportCsv': 'Exportar CSV',
+  'harvest.exportJson': 'Exportar JSON',
 }
 
 const fr: Record<keyof typeof en, string> = {
@@ -179,6 +250,7 @@ const fr: Record<keyof typeof en, string> = {
   'phase.breakSession': 'Pause · Session {current} sur {total}',
   'phase.readyJourney': 'Prêt pour un parcours de {hours}',
   'phase.journeyComplete': 'Parcours terminé !',
+  'phase.paused': 'En pause',
   'journey.label': 'Parcours',
   'journey.todayTomatoes': '{count} aujourd’hui',
   'journey.cycles': 'cycles de {hours}',
@@ -201,6 +273,7 @@ const fr: Record<keyof typeof en, string> = {
   'controls.settings': 'Réglages',
   'controls.harvest': 'Récolte',
   'controls.go': 'Go',
+  'controls.continue': 'Continuer',
   'controls.pause': 'Pause',
   'controls.reset': 'Réinitialiser',
   'controls.resetConfirm': 'Réinitialiser ce parcours ?',
@@ -231,6 +304,36 @@ const fr: Record<keyof typeof en, string> = {
   'hours.plural': '{n} heures',
   'hours.oneDecimal': '{n} heures',
   'hours.minutes': '{n} min',
+  'studyTip.label': 'Conseil',
+  'onboarding.title': 'Bienvenue sur Tomato Time',
+  'onboarding.lead': 'Un parcours Pomodoro pour l’étude profonde — conçu pour Studio9 Medical Science.',
+  'onboarding.step1':
+    '4 sessions de concentration — votre tomate parcourt une piste par session ({work} min chacune par défaut).',
+  'onboarding.step2':
+    'Courtes pauses — {break} min pour vous étirer, vous hydrater et repartir entre les sessions.',
+  'onboarding.step3':
+    'Un parcours — environ {hours} d’étude concentrée, puis célébrez et récoltez vos tomates.',
+  'onboarding.step4':
+    'Son et alertes — autorisez les notifications pour entendre la fin d’une session, même dans une autre app.',
+  'onboarding.start': 'Commencer mon premier parcours',
+  'onboarding.settings': 'Ajuster les durées d’abord',
+  'harvest.title': 'Récolte',
+  'harvest.tagline': 'Une tomate à la fois',
+  'harvest.close': 'Fermer la récolte',
+  'harvest.today': 'Aujourd’hui',
+  'harvest.tomatoOne': '{n} tomate',
+  'harvest.tomatoMany': '{n} tomates',
+  'harvest.journeyTodayOne': '{n} parcours aujourd’hui',
+  'harvest.journeyTodayMany': '{n} parcours aujourd’hui',
+  'harvest.thisWeek': 'Cette semaine',
+  'harvest.thisMonth': 'Ce mois',
+  'harvest.last7Days': '7 derniers jours',
+  'harvest.unitTomatoes': 'tomates',
+  'harvest.unitJourneys': 'parcours',
+  'harvest.dayStreak': 'jours d’affilée',
+  'harvest.allTime': 'total',
+  'harvest.exportCsv': 'Exporter CSV',
+  'harvest.exportJson': 'Exporter JSON',
 }
 
 const es: Record<keyof typeof en, string> = {
@@ -238,6 +341,7 @@ const es: Record<keyof typeof en, string> = {
   'phase.breakSession': 'Descanso · Sesión {current} de {total}',
   'phase.readyJourney': 'Listo para un recorrido de {hours}',
   'phase.journeyComplete': '¡Recorrido completado!',
+  'phase.paused': 'En pausa',
   'journey.label': 'Recorridos',
   'journey.todayTomatoes': '{count} hoy',
   'journey.cycles': 'ciclos de {hours}',
@@ -260,6 +364,7 @@ const es: Record<keyof typeof en, string> = {
   'controls.settings': 'Ajustes',
   'controls.harvest': 'Cosecha',
   'controls.go': 'Iniciar',
+  'controls.continue': 'Continuar',
   'controls.pause': 'Pausar',
   'controls.reset': 'Reiniciar',
   'controls.resetConfirm': '¿Reiniciar este recorrido?',
@@ -290,6 +395,36 @@ const es: Record<keyof typeof en, string> = {
   'hours.plural': '{n} horas',
   'hours.oneDecimal': '{n} horas',
   'hours.minutes': '{n} min',
+  'studyTip.label': 'Consejo',
+  'onboarding.title': 'Bienvenido a Tomato Time',
+  'onboarding.lead': 'Un recorrido Pomodoro para estudio profundo — creado para Studio9 Medical Science.',
+  'onboarding.step1':
+    '4 sesiones de enfoque — tu tomate recorre una pista por sesión ({work} min cada una por defecto).',
+  'onboarding.step2':
+    'Descansos cortos — {break} min para estirarte, hidratarte y reiniciar entre sesiones.',
+  'onboarding.step3':
+    'Un recorrido — unas {hours} de estudio concentrado, luego celebra y cosecha tus tomates.',
+  'onboarding.step4':
+    'Sonido y alertas — permite notificaciones para oír cuando termina una sesión, incluso en otra app.',
+  'onboarding.start': 'Empezar mi primer recorrido',
+  'onboarding.settings': 'Ajustar tiempos primero',
+  'harvest.title': 'Cosecha',
+  'harvest.tagline': 'Un tomate a la vez',
+  'harvest.close': 'Cerrar cosecha',
+  'harvest.today': 'Hoy',
+  'harvest.tomatoOne': '{n} tomate',
+  'harvest.tomatoMany': '{n} tomates',
+  'harvest.journeyTodayOne': '{n} recorrido hoy',
+  'harvest.journeyTodayMany': '{n} recorridos hoy',
+  'harvest.thisWeek': 'Esta semana',
+  'harvest.thisMonth': 'Este mes',
+  'harvest.last7Days': 'Últimos 7 días',
+  'harvest.unitTomatoes': 'tomates',
+  'harvest.unitJourneys': 'recorridos',
+  'harvest.dayStreak': 'días seguidos',
+  'harvest.allTime': 'total',
+  'harvest.exportCsv': 'Exportar CSV',
+  'harvest.exportJson': 'Exportar JSON',
 }
 
 const it: Record<keyof typeof en, string> = {
@@ -297,6 +432,7 @@ const it: Record<keyof typeof en, string> = {
   'phase.breakSession': 'Pausa · Sessione {current} di {total}',
   'phase.readyJourney': 'Pronto per un percorso di {hours}',
   'phase.journeyComplete': 'Percorso completato!',
+  'phase.paused': 'In pausa',
   'journey.label': 'Percorsi',
   'journey.todayTomatoes': '{count} oggi',
   'journey.cycles': 'cicli di {hours}',
@@ -319,6 +455,7 @@ const it: Record<keyof typeof en, string> = {
   'controls.settings': 'Impostazioni',
   'controls.harvest': 'Raccolta',
   'controls.go': 'Inizia',
+  'controls.continue': 'Continua',
   'controls.pause': 'Pausa',
   'controls.reset': 'Reimposta',
   'controls.resetConfirm': 'Reimpostare questo percorso?',
@@ -349,6 +486,36 @@ const it: Record<keyof typeof en, string> = {
   'hours.plural': '{n} ore',
   'hours.oneDecimal': '{n} ore',
   'hours.minutes': '{n} min',
+  'studyTip.label': 'Suggerimento',
+  'onboarding.title': 'Benvenuto su Tomato Time',
+  'onboarding.lead': 'Un percorso Pomodoro per lo studio profondo — creato per Studio9 Medical Science.',
+  'onboarding.step1':
+    '4 sessioni di focus — il pomodoro percorre un binario per sessione ({work} min ciascuna di default).',
+  'onboarding.step2':
+    'Brevi pause — {break} min per alzarti, idratarti e ricominciare tra le sessioni.',
+  'onboarding.step3':
+    'Un percorso — circa {hours} di studio concentrato, poi festeggia e raccogli i pomodori.',
+  'onboarding.step4':
+    'Audio e avvisi — consenti le notifiche per sentire la fine di una sessione, anche in un’altra app.',
+  'onboarding.start': 'Inizia il mio primo percorso',
+  'onboarding.settings': 'Regola i tempi prima',
+  'harvest.title': 'Raccolta',
+  'harvest.tagline': 'Un pomodoro alla volta',
+  'harvest.close': 'Chiudi raccolta',
+  'harvest.today': 'Oggi',
+  'harvest.tomatoOne': '{n} pomodoro',
+  'harvest.tomatoMany': '{n} pomodori',
+  'harvest.journeyTodayOne': '{n} percorso oggi',
+  'harvest.journeyTodayMany': '{n} percorsi oggi',
+  'harvest.thisWeek': 'Questa settimana',
+  'harvest.thisMonth': 'Questo mese',
+  'harvest.last7Days': 'Ultimi 7 giorni',
+  'harvest.unitTomatoes': 'pomodori',
+  'harvest.unitJourneys': 'percorsi',
+  'harvest.dayStreak': 'giorni di fila',
+  'harvest.allTime': 'totale',
+  'harvest.exportCsv': 'Esporta CSV',
+  'harvest.exportJson': 'Esporta JSON',
 }
 
 export type MessageKey = keyof typeof en

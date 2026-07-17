@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import type { Phase } from '../constants'
 import type { TomatoPosition, TimerStatus } from '../types'
 import { MEDICAL_SITE_URL, SESSIONS_PER_CYCLE } from '../constants'
@@ -34,6 +35,7 @@ interface MainScreenProps {
   onOpenHarvest: () => void
   onOpenSettings: () => void
   onToggleSound: () => void
+  onRequestReset: () => void
 }
 
 export function MainScreen({
@@ -53,10 +55,37 @@ export function MainScreen({
   onOpenHarvest,
   onOpenSettings,
   onToggleSound,
+  onRequestReset,
 }: MainScreenProps) {
   const { locale, t } = useLocale()
   const cycleHours = formatCycleHoursLocalized(locale, getCycleDurationMin())
   const focusMode = inCycle && !celebrating
+  const isPaused = status === 'paused'
+
+  const [focusEntering, setFocusEntering] = useState(false)
+  const [pulseDot, setPulseDot] = useState<number | null>(null)
+  const wasInCycle = useRef(false)
+  const prevPhase = useRef(phase)
+
+  useEffect(() => {
+    if (focusMode && !wasInCycle.current) {
+      setFocusEntering(true)
+      const timer = window.setTimeout(() => setFocusEntering(false), 450)
+      wasInCycle.current = true
+      return () => window.clearTimeout(timer)
+    }
+    if (!focusMode) wasInCycle.current = false
+  }, [focusMode])
+
+  useEffect(() => {
+    if (prevPhase.current === 'work' && phase === 'break') {
+      setPulseDot(sessionIndex)
+      const timer = window.setTimeout(() => setPulseDot(null), 900)
+      prevPhase.current = phase
+      return () => window.clearTimeout(timer)
+    }
+    prevPhase.current = phase
+  }, [phase, sessionIndex])
 
   const completedSessions = celebrating
     ? SESSIONS_PER_CYCLE
@@ -68,7 +97,7 @@ export function MainScreen({
 
   const tomatoMood = celebrating
     ? 'celebrate'
-    : status === 'paused'
+    : isPaused
       ? 'paused'
       : phase === 'break'
         ? 'break'
@@ -92,10 +121,22 @@ export function MainScreen({
           })
         : t('phase.readyJourney', { hours: cycleHours })
 
+  const inlinePhaseLabel =
+    isPaused && focusMode ? `${phaseLabel} · ${t('phase.paused')}` : phaseLabel
+
   const showIdleExtras = !inCycle && !celebrating
 
   return (
-    <div className={`main-screen ${focusMode ? 'main-screen--focus' : ''}`}>
+    <div
+      className={[
+        'main-screen',
+        focusMode ? 'main-screen--focus' : '',
+        focusEntering ? 'main-screen--focus-enter' : '',
+        isPaused && focusMode ? 'main-screen--paused' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
       {celebrating && (
         <div className="journey-overlay" role="dialog" aria-live="assertive">
           <Confetti />
@@ -124,7 +165,7 @@ export function MainScreen({
       <header className={`top-bar ${focusMode ? 'top-bar--focus' : ''}`}>
         <div className="brand">
           {showIdleExtras && (
-            <h1 className="brand-title">
+            <h1 className="brand-title brand-title--idle">
               <span className="brand-rest">T</span>
               <span className="brand-o">
                 <Tomato mood="happy" size={18} />
@@ -137,7 +178,7 @@ export function MainScreen({
             </h1>
           )}
           {focusMode && (
-            <p className="phase-label phase-label--inline">{phaseLabel}</p>
+            <p className="phase-label phase-label--inline">{inlinePhaseLabel}</p>
           )}
         </div>
 
@@ -167,6 +208,7 @@ export function MainScreen({
                     'cycle-dot',
                     i < completedSessions ? 'cycle-dot--done' : '',
                     inCycle && i === activeSession ? 'cycle-dot--active' : '',
+                    i === pulseDot ? 'cycle-dot--pulse' : '',
                     celebrating ? 'cycle-dot--done' : '',
                   ]
                     .filter(Boolean)
@@ -183,6 +225,7 @@ export function MainScreen({
               onToggleSound={onToggleSound}
               onOpenSettings={onOpenSettings}
               onOpenHarvest={onOpenHarvest}
+              onRequestReset={onRequestReset}
             />
           )}
         </div>
@@ -218,7 +261,7 @@ export function MainScreen({
       {showIdleExtras && <StudyTip />}
 
       {showIdleExtras && (
-        <div className="main-screen-footer">
+        <div className="main-screen-footer main-screen-footer--idle">
           <Studio9Link />
           <p className="keyboard-hint">
             <kbd>Space</kbd> {t('controls.keyboardHint')}

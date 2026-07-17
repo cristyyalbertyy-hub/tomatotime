@@ -8,6 +8,7 @@ interface FocusMenuProps {
   onToggleSound: () => void
   onOpenSettings: () => void
   onOpenHarvest: () => void
+  onRequestReset: () => void
 }
 
 export function FocusMenu({
@@ -16,6 +17,7 @@ export function FocusMenu({
   onToggleSound,
   onOpenSettings,
   onOpenHarvest,
+  onRequestReset,
 }: FocusMenuProps) {
   const { t } = useLocale()
   const [open, setOpen] = useState(false)
@@ -95,6 +97,15 @@ export function FocusMenu({
             {todayTomatoes > 0 && (
               <span className="focus-menu-badge">{todayTomatoes}</span>
             )}
+          </button>
+
+          <button
+            type="button"
+            className="focus-menu-item focus-menu-item--danger"
+            role="menuitem"
+            onClick={() => closeAnd(onRequestReset)}
+          >
+            <span>{t('controls.reset')}</span>
           </button>
         </div>
       )}

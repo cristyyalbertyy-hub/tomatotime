@@ -27,6 +27,7 @@ export default function App() {
   const onboarding = useOnboarding()
   const [showHarvest, setShowHarvest] = useState(screenshotScene === 'harvest')
   const [showSettings, setShowSettings] = useState(false)
+  const [resetConfirm, setResetConfirm] = useState(false)
 
   const demo = screenshotScene ? getDemoTimerProps(screenshotScene) : null
   const demoHarvest = screenshotScene ? getDemoHarvestStats() : null
@@ -120,6 +121,7 @@ export default function App() {
         onOpenHarvest={() => setShowHarvest(true)}
         onOpenSettings={() => setShowSettings(true)}
         onToggleSound={screenshotScene ? () => {} : sound.toggleSound}
+        onRequestReset={() => setResetConfirm(true)}
       />
       <Controls
         status={timerProps.status}
@@ -127,9 +129,11 @@ export default function App() {
         inCycle={timerProps.inCycle}
         celebrating={timerProps.celebrating}
         todayTomatoes={todayTomatoes}
+        resetConfirm={resetConfirm}
         onGo={handleGo}
         onPause={screenshotScene ? () => {} : timer.pause}
         onReset={screenshotScene ? () => {} : timer.reset}
+        onDismissReset={() => setResetConfirm(false)}
         onToggleSound={screenshotScene ? () => {} : sound.toggleSound}
         onOpenHarvest={() => setShowHarvest(true)}
         onOpenSettings={() => setShowSettings(true)}

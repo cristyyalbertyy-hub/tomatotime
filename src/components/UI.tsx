@@ -9,9 +9,11 @@ interface ControlsProps {
   inCycle: boolean
   celebrating: boolean
   todayTomatoes: number
+  resetConfirm: boolean
   onGo: () => void
   onPause: () => void
   onReset: () => void
+  onDismissReset: () => void
   onToggleSound: () => void
   onOpenHarvest: () => void
   onOpenSettings: () => void
@@ -23,22 +25,38 @@ export function Controls({
   inCycle,
   celebrating,
   todayTomatoes,
+  resetConfirm,
   onGo,
   onPause,
   onReset,
+  onDismissReset,
   onToggleSound,
   onOpenHarvest,
   onOpenSettings,
 }: ControlsProps) {
   const { t } = useLocale()
-  const [confirmReset, setConfirmReset] = useState(false)
+  const [localResetConfirm, setLocalResetConfirm] = useState(false)
 
   const focusMode = inCycle && !celebrating
-  const showReset = (inCycle || celebrating) && !confirmReset
+  const confirmReset = resetConfirm || localResetConfirm
+  const isRunning = status === 'running'
+  const isPausedInCycle = focusMode && status === 'paused'
+
+  const heroLabel = isRunning
+    ? t('controls.pause')
+    : isPausedInCycle
+      ? t('controls.continue')
+      : t('controls.go')
 
   const handleConfirmReset = () => {
     onReset()
-    setConfirmReset(false)
+    setLocalResetConfirm(false)
+    onDismissReset()
+  }
+
+  const handleCancelReset = () => {
+    setLocalResetConfirm(false)
+    onDismissReset()
   }
 
   return (
@@ -61,7 +79,7 @@ export function Controls({
             <button
               type="button"
               className="btn btn--reset-no"
-              onClick={() => setConfirmReset(false)}
+              onClick={handleCancelReset}
             >
               {t('controls.cancel')}
             </button>
@@ -69,28 +87,21 @@ export function Controls({
         </div>
       ) : (
         <>
-          <div className="controls-primary">
+          <div className="controls-primary controls-primary--hero">
             <button
               type="button"
-              className="btn btn--go"
-              onClick={onGo}
-              disabled={status === 'running' || celebrating}
+              className={`btn btn--hero ${isRunning ? 'btn--pause' : 'btn--go'}`}
+              onClick={isRunning ? onPause : onGo}
+              disabled={celebrating}
             >
-              {t('controls.go')}
+              {heroLabel}
             </button>
-            <button
-              type="button"
-              className="btn btn--pause"
-              onClick={onPause}
-              disabled={status !== 'running'}
-            >
-              {t('controls.pause')}
-            </button>
-            {showReset && (
+
+            {celebrating && (
               <button
                 type="button"
-                className="btn btn--reset"
-                onClick={() => setConfirmReset(true)}
+                className="btn btn--reset btn--reset-inline"
+                onClick={() => setLocalResetConfirm(true)}
               >
                 {t('controls.reset')}
               </button>

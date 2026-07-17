@@ -296,6 +296,27 @@
   transform: scale(1.2);
 }
 
+.cycle-dot--pulse {
+  animation: cycle-dot-pulse 0.85s ease-out;
+}
+
+@keyframes cycle-dot-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--teal-glow);
+  }
+  40% {
+    transform: scale(1.45);
+    background: var(--orange);
+    border-color: var(--orange-deep);
+    box-shadow: 0 0 0 8px transparent;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
 .phase-label {
   text-align: center;
   font-size: 0.75rem;
@@ -346,6 +367,56 @@
 
 .main-screen--focus .session-tracks {
   gap: clamp(6px, 1.6vh, 12px);
+}
+
+.main-screen--focus-enter .brand-title--idle,
+.main-screen--focus-enter .phase-label--idle,
+.main-screen--focus-enter .study-tip,
+.main-screen--focus-enter .main-screen-footer--idle {
+  animation: focus-chrome-out 0.35s ease forwards;
+}
+
+.main-screen--focus-enter .track-area {
+  animation: focus-content-in 0.42s ease 0.08s both;
+}
+
+.main-screen--focus-enter .timer-section {
+  animation: focus-content-in 0.42s ease 0.14s both;
+}
+
+.main-screen--focus-enter .top-bar {
+  animation: focus-content-in 0.32s ease both;
+}
+
+@keyframes focus-chrome-out {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+}
+
+@keyframes focus-content-in {
+  from {
+    opacity: 0.65;
+    transform: translateY(8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.main-screen--paused .timer-ring {
+  opacity: 0.72;
+  filter: grayscale(0.15);
+}
+
+.main-screen--paused .phase-label--inline {
+  opacity: 0.85;
+  color: var(--text-muted);
 }
 
 /* ── Track area — 4 session lines ── */
@@ -582,23 +653,42 @@
 }
 
 .track-line--finishing .track-progress {
-  animation: track-finish-pulse 0.6s ease-out;
+  animation: track-finish-pulse 0.65s ease-out;
 }
 
 @keyframes track-finish-pulse {
   0%,
   100% {
     filter: brightness(1);
+    box-shadow: none;
   }
-  50% {
-    filter: brightness(1.12);
-    box-shadow: inset 0 0 8px var(--teal-glow);
+  45% {
+    filter: brightness(1.18);
+    box-shadow: inset 0 0 10px var(--teal-glow), 0 0 12px var(--teal-glow);
   }
 }
 
 .session-track--line-end .session-track-label {
   color: var(--orange-deep);
   transform: scale(1.08);
+}
+
+.session-track--complete-flash {
+  animation: session-complete-flash 0.75s ease-out;
+}
+
+@keyframes session-complete-flash {
+  0% {
+    background: transparent;
+  }
+  35% {
+    background: var(--orange-surface);
+    box-shadow: 0 0 0 2px var(--orange-border), 0 0 18px var(--orange-glow);
+  }
+  100% {
+    background: transparent;
+    box-shadow: none;
+  }
 }
 
 .track-marker--break {
@@ -1013,9 +1103,39 @@
   max-width: 320px;
 }
 
-.controls-bar--focus .btn {
-  padding: 14px 20px;
-  font-size: 1rem;
+.controls-primary--hero {
+  max-width: 280px;
+}
+
+.btn--hero {
+  flex: 1;
+  min-width: 200px;
+  max-width: 280px;
+  padding: 18px 28px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.controls-bar--focus .btn--hero {
+  min-width: 220px;
+  max-width: 320px;
+}
+
+.btn--reset-inline {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 140px;
+  padding: 12px 18px;
+  font-size: 0.88rem;
+  margin-top: 4px;
+}
+
+.focus-menu-item--danger {
+  color: var(--orange-deep);
+  border-top: 1px solid var(--border-soft);
+  margin-top: 4px;
+  padding-top: 12px;
 }
 
 .controls-primary {

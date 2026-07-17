@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import type { Phase } from '../constants'
 import type { TomatoPosition } from '../types'
 import { SESSIONS_PER_CYCLE } from '../constants'
@@ -61,6 +62,23 @@ export function SessionTracks({
   const { t } = useLocale()
   const workMin = getWorkDurationMin()
   const breakMin = getBreakDurationMin()
+  const [flashRow, setFlashRow] = useState<number | null>(null)
+  const prevProgress = useRef<number[]>([0, 0, 0, 0])
+
+  useEffect(() => {
+    let flashIndex: number | null = null
+    for (let i = 0; i < SESSIONS_PER_CYCLE; i++) {
+      const progress = getRowProgress(i, sessionIndex, phase, tomatoPos, celebrating)
+      if (prevProgress.current[i] < 99 && progress >= 99) {
+        flashIndex = i
+      }
+      prevProgress.current[i] = progress
+    }
+    if (flashIndex === null) return
+    setFlashRow(flashIndex)
+    const timer = window.setTimeout(() => setFlashRow(null), 800)
+    return () => window.clearTimeout(timer)
+  }, [sessionIndex, phase, tomatoPos, celebrating])
 
   return (
     <div className="session-tracks" aria-label={t('session.aria')}>
@@ -96,6 +114,7 @@ export function SessionTracks({
               'session-track',
               `session-track--${rowState}`,
               atLineEnd && showTomato ? 'session-track--line-end' : '',
+              flashRow === i ? 'session-track--complete-flash' : '',
             ]
               .filter(Boolean)
               .join(' ')}

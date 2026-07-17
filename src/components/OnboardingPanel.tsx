@@ -1,10 +1,14 @@
 import { Tomato } from './Tomato'
 import {
-  formatCycleHours,
+  formatCycleHoursLocalized,
+} from '../i18n/messages'
+import { SESSIONS_PER_CYCLE } from '../constants'
+import {
   getBreakDurationMin,
-  getJourneyDescription,
+  getCycleDurationMin,
   getWorkDurationMin,
 } from '../utils/settings'
+import { useLocale } from '../hooks/useLocale'
 
 interface OnboardingPanelProps {
   onStart: () => void
@@ -12,8 +16,10 @@ interface OnboardingPanelProps {
 }
 
 export function OnboardingPanel({ onStart, onOpenSettings }: OnboardingPanelProps) {
+  const { locale, t } = useLocale()
   const work = getWorkDurationMin()
   const brk = getBreakDurationMin()
+  const cycleHours = formatCycleHoursLocalized(locale, getCycleDurationMin())
 
   return (
     <div className="onboarding-overlay" role="dialog" aria-labelledby="onboarding-title">
@@ -21,44 +27,37 @@ export function OnboardingPanel({ onStart, onOpenSettings }: OnboardingPanelProp
         <div className="onboarding-hero">
           <Tomato mood="happy" size={72} />
           <h2 id="onboarding-title" className="onboarding-title">
-            Welcome to Tomato Time
+            {t('onboarding.title')}
           </h2>
-          <p className="onboarding-lead">
-            A Pomodoro journey for deep study — built for Studio9 Medical Science.
-          </p>
+          <p className="onboarding-lead">{t('onboarding.lead')}</p>
         </div>
 
         <ol className="onboarding-steps">
-          <li>
-            <strong>4 focus sessions</strong> — your tomato travels one track per session (
-            {work} min each by default).
-          </li>
-          <li>
-            <strong>Short breaks</strong> — {brk} min to stretch, hydrate, and reset between
-            sessions.
-          </li>
-          <li>
-            <strong>One journey</strong> — about {formatCycleHours()} of focused study, then
-            celebrate and harvest your tomatoes.
-          </li>
-          <li>
-            <strong>Sound & alerts</strong> — allow notifications so you hear when a session
-            ends, even in another app.
-          </li>
+          <li>{t('onboarding.step1', { work })}</li>
+          <li>{t('onboarding.step2', { break: brk })}</li>
+          <li>{t('onboarding.step3', { hours: cycleHours })}</li>
+          <li>{t('onboarding.step4')}</li>
         </ol>
 
-        <p className="onboarding-note">{getJourneyDescription()}</p>
+        <p className="onboarding-note">
+          {t('settings.journeyDesc', {
+            sessions: SESSIONS_PER_CYCLE,
+            work,
+            break: brk,
+            hours: cycleHours,
+          })}
+        </p>
 
         <div className="onboarding-actions">
           <button type="button" className="btn btn-primary onboarding-start" onClick={onStart}>
-            Start my first journey
+            {t('onboarding.start')}
           </button>
           <button
             type="button"
             className="btn btn-secondary onboarding-settings"
             onClick={onOpenSettings}
           >
-            Adjust times first
+            {t('onboarding.settings')}
           </button>
         </div>
       </div>
