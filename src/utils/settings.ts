@@ -9,6 +9,9 @@ export const SETTINGS_EVENT = 'tomato-settings-update'
 const WORK_KEY = 'tomato-time-work-min'
 const BREAK_KEY = 'tomato-time-break-min'
 const ONBOARDED_KEY = 'tomato-time-onboarded'
+const TIMER_DISPLAY_KEY = 'tomato-time-timer-display'
+
+export type TimerDisplayMode = 'countdown' | 'countup'
 
 const MIN_WORK_MIN = 5
 const MAX_WORK_MIN = 60
@@ -103,4 +106,23 @@ export function setOnboarded() {
   } catch {
     /* ignore */
   }
+}
+
+export function getTimerDisplayMode(): TimerDisplayMode {
+  try {
+    const raw = localStorage.getItem(TIMER_DISPLAY_KEY)
+    if (raw === 'countup') return 'countup'
+  } catch {
+    /* ignore */
+  }
+  return 'countdown'
+}
+
+export function setTimerDisplayMode(mode: TimerDisplayMode) {
+  try {
+    localStorage.setItem(TIMER_DISPLAY_KEY, mode)
+  } catch {
+    /* ignore */
+  }
+  window.dispatchEvent(new Event(SETTINGS_EVENT))
 }

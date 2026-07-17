@@ -9,6 +9,7 @@ import type { ThemePreference } from '../utils/theme'
 import type { SoundPreset } from '../utils/sound'
 import type { TomatoColorPreset } from '../utils/tomatoColor'
 import { getTomatoSwatchColor } from '../utils/tomatoColor'
+import type { TimerDisplayMode } from '../utils/settings'
 import { useLocale } from '../hooks/useLocale'
 
 interface SettingsPanelProps {
@@ -17,12 +18,14 @@ interface SettingsPanelProps {
   theme: ThemePreference
   soundPreset: SoundPreset
   tomatoColor: TomatoColorPreset
+  timerDisplay: TimerDisplayMode
   locked: boolean
   onChangeWork: (minutes: number) => void
   onChangeBreak: (minutes: number) => void
   onChangeTheme: (theme: ThemePreference) => void
   onChangeSoundPreset: (preset: SoundPreset) => void
   onChangeTomatoColor: (preset: TomatoColorPreset) => void
+  onChangeTimerDisplay: (mode: TimerDisplayMode) => void
   onClose: () => void
 }
 
@@ -50,6 +53,14 @@ const TOMATO_COLOR_OPTIONS: {
   { id: 'golden', labelKey: 'settings.tomatoGolden' },
 ]
 
+const TIMER_DISPLAY_OPTIONS: {
+  id: TimerDisplayMode
+  labelKey: 'settings.timerCountdown' | 'settings.timerCountUp'
+}[] = [
+  { id: 'countdown', labelKey: 'settings.timerCountdown' },
+  { id: 'countup', labelKey: 'settings.timerCountUp' },
+]
+
 const LOCALE_OPTIONS: {
   id: Locale
   labelKey:
@@ -72,12 +83,14 @@ export function SettingsPanel({
   theme,
   soundPreset,
   tomatoColor,
+  timerDisplay,
   locked,
   onChangeWork,
   onChangeBreak,
   onChangeTheme,
   onChangeSoundPreset,
   onChangeTomatoColor,
+  onChangeTimerDisplay,
   onClose,
 }: SettingsPanelProps) {
   const { locale, setLocale, t } = useLocale()
@@ -146,6 +159,23 @@ export function SettingsPanel({
               onChange={(e) => onChangeBreak(Number(e.target.value))}
             />
             <span className="settings-value">{t('settings.min', { n: breakMin })}</span>
+          </div>
+        </div>
+
+        <div className="settings-field">
+          <span className="settings-label">{t('settings.timerDisplay')}</span>
+          <div className="settings-theme-row" role="group" aria-label={t('settings.timerDisplay')}>
+            {TIMER_DISPLAY_OPTIONS.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                className={`settings-theme-btn ${timerDisplay === option.id ? 'settings-theme-btn--active' : ''}`}
+                aria-pressed={timerDisplay === option.id}
+                onClick={() => onChangeTimerDisplay(option.id)}
+              >
+                {t(option.labelKey)}
+              </button>
+            ))}
           </div>
         </div>
 

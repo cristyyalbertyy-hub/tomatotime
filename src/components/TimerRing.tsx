@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import type { Phase } from '../constants'
 import { getBreakDurationSec, getWorkDurationSec } from '../utils/settings'
+import type { TimerDisplayMode } from '../utils/settings'
 import { useLocale } from '../hooks/useLocale'
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
   phaseProgress: number
   isRunning: boolean
   isPaused?: boolean
+  timerDisplay?: TimerDisplayMode
 }
 
 function formatTime(totalSec: number) {
@@ -24,6 +26,7 @@ export function TimerRing({
   phaseProgress,
   isRunning,
   isPaused = false,
+  timerDisplay = 'countdown',
 }: Props) {
   const { t } = useLocale()
   const size = 220
@@ -49,7 +52,15 @@ export function TimerRing({
   const remainingSec =
     phase === 'idle' ? phaseTotalSec : Math.max(0, phaseTotalSec - elapsedSec)
 
+  const elapsedDisplaySec =
+    phase === 'idle' ? 0 : Math.min(elapsedSec, phaseTotalSec)
+
+  const displaySec = timerDisplay === 'countup' ? elapsedDisplaySec : remainingSec
+
   const phaseTotalMin = Math.round(phaseTotalSec / 60)
+
+  const ariaTimeKey =
+    timerDisplay === 'countup' ? 'timer.ariaElapsed' : 'timer.ariaRemaining'
 
   return (
     <div
@@ -58,14 +69,15 @@ export function TimerRing({
         phase,
         isRunning ? 'running' : '',
         isPaused ? 'timer-ring--paused' : '',
+        timerDisplay === 'countup' ? 'timer-ring--countup' : 'timer-ring--countdown',
       ]
         .filter(Boolean)
         .join(' ')}
       role="timer"
       aria-live="polite"
-      aria-label={t('timer.aria', {
+      aria-label={t(ariaTimeKey, {
         phase: phaseLabel,
-        time: formatTime(remainingSec),
+        time: formatTime(displaySec),
       })}
     >
       <svg
@@ -102,11 +114,16 @@ export function TimerRing({
         {isPaused && phase !== 'idle' && (
           <span className="timer-ring-paused-badge">{t('phase.paused')}</span>
         )}
-        <span className="timer-ring-time">{formatTime(remainingSec)}</span>
+        <span className="timer-ring-time">{formatTime(displaySec)}</span>
         {phase !== 'idle' && (
           <span className="timer-ring-sub">
-            {t('timer.ofMin', { min: phaseTotalMin })}
+            {timerDisplay === 'countup'
+              ? t('timer.ofMinTotal', { min: phaseTotalMin })
+              : t('timer.ofMin', { min: phaseTotalMin })}
           </span>
+        )}
+        {phase === 'idle' && (
+          <span className="timer-ring-sub">{t('timer.ofMin', { min: phaseTotalMin })}</span>
         )}
       </div>
     </div>

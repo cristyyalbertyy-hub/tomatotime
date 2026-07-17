@@ -2,9 +2,12 @@ import { useCallback, useEffect, useState } from 'react'
 import {
   getBreakDurationMin,
   getWorkDurationMin,
+  getTimerDisplayMode,
   setBreakDurationMin,
   setWorkDurationMin,
+  setTimerDisplayMode,
   SETTINGS_EVENT,
+  type TimerDisplayMode,
 } from '../utils/settings'
 import {
   getThemePreference,
@@ -16,11 +19,13 @@ export function useSettings() {
   const [workMin, setWorkMin] = useState(getWorkDurationMin)
   const [breakMin, setBreakMin] = useState(getBreakDurationMin)
   const [theme, setTheme] = useState<ThemePreference>(getThemePreference)
+  const [timerDisplay, setTimerDisplay] = useState<TimerDisplayMode>(getTimerDisplayMode)
 
   useEffect(() => {
     const refresh = () => {
       setWorkMin(getWorkDurationMin())
       setBreakMin(getBreakDurationMin())
+      setTimerDisplay(getTimerDisplayMode())
     }
     window.addEventListener(SETTINGS_EVENT, refresh)
     return () => window.removeEventListener(SETTINGS_EVENT, refresh)
@@ -47,5 +52,19 @@ export function useSettings() {
     setTheme(next)
   }, [])
 
-  return { workMin, breakMin, theme, updateWorkMin, updateBreakMin, updateTheme }
+  const updateTimerDisplay = useCallback((next: TimerDisplayMode) => {
+    setTimerDisplayMode(next)
+    setTimerDisplay(next)
+  }, [])
+
+  return {
+    workMin,
+    breakMin,
+    theme,
+    timerDisplay,
+    updateWorkMin,
+    updateBreakMin,
+    updateTheme,
+    updateTimerDisplay,
+  }
 }

@@ -7,6 +7,7 @@ import {
   getWorkDurationSec,
 } from '../utils/settings'
 import { formatCycleHoursLocalized, journeyPluralSuffix } from '../i18n/messages'
+import type { TimerDisplayMode } from '../utils/settings'
 import { useLocale } from '../hooks/useLocale'
 import { Tomato } from './Tomato'
 import { SessionTracks } from './SessionTracks'
@@ -32,6 +33,7 @@ interface MainScreenProps {
   celebrating: boolean
   inCycle: boolean
   soundOn: boolean
+  timerDisplay: TimerDisplayMode
   onOpenHarvest: () => void
   onOpenSettings: () => void
   onToggleSound: () => void
@@ -52,6 +54,7 @@ export function MainScreen({
   celebrating,
   inCycle,
   soundOn,
+  timerDisplay,
   onOpenHarvest,
   onOpenSettings,
   onToggleSound,
@@ -255,6 +258,7 @@ export function MainScreen({
             phaseProgress={phaseProgress}
             isRunning={isRunning}
             isPaused={isPaused}
+            timerDisplay={timerDisplay}
           />
         </div>
       )}

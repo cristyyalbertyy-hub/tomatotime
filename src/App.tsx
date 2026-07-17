@@ -143,6 +143,7 @@ export default function App() {
         celebrating={timerProps.celebrating}
         inCycle={timerProps.inCycle}
         soundOn={sound.soundOn}
+        timerDisplay={settings.timerDisplay}
         onOpenHarvest={() => setShowHarvest(true)}
         onOpenSettings={() => setShowSettings(true)}
         onToggleSound={screenshotScene ? () => {} : sound.toggleSound}
@@ -176,10 +177,12 @@ export default function App() {
           theme={settings.theme}
           soundPreset={sound.soundPreset}
           tomatoColor={tomatoColor.tomatoColor}
+          timerDisplay={settings.timerDisplay}
           locked={settingsLocked}
           onChangeWork={settings.updateWorkMin}
           onChangeBreak={settings.updateBreakMin}
           onChangeTheme={settings.updateTheme}
+          onChangeTimerDisplay={settings.updateTimerDisplay}
           onChangeSoundPreset={sound.setSoundPreset}
           onChangeTomatoColor={tomatoColor.setTomatoColor}
           onClose={() => setShowSettings(false)}
