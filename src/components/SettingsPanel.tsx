@@ -1,7 +1,4 @@
-import {
-  formatCycleHoursLocalized,
-  type Locale,
-} from '../i18n/messages'
+import { formatCycleHoursLocalized, type Locale } from '../i18n/messages'
 import {
   getBreakDurationBounds,
   getCycleDurationMin,
@@ -28,9 +25,20 @@ const THEME_OPTIONS: { id: ThemePreference; labelKey: 'settings.themeLight' | 's
   { id: 'system', labelKey: 'settings.themeSystem' },
 ]
 
-const LOCALE_OPTIONS: { id: Locale; labelKey: 'settings.langEn' | 'settings.langPt' }[] = [
+const LOCALE_OPTIONS: {
+  id: Locale
+  labelKey:
+    | 'settings.langEn'
+    | 'settings.langPt'
+    | 'settings.langFr'
+    | 'settings.langEs'
+    | 'settings.langIt'
+}[] = [
   { id: 'en', labelKey: 'settings.langEn' },
   { id: 'pt', labelKey: 'settings.langPt' },
+  { id: 'fr', labelKey: 'settings.langFr' },
+  { id: 'es', labelKey: 'settings.langEs' },
+  { id: 'it', labelKey: 'settings.langIt' },
 ]
 
 export function SettingsPanel({
@@ -131,7 +139,7 @@ export function SettingsPanel({
 
         <div className="settings-field">
           <span className="settings-label">{t('settings.language')}</span>
-          <div className="settings-theme-row" role="group" aria-label={t('settings.language')}>
+          <div className="settings-lang-row" role="group" aria-label={t('settings.language')}>
             {LOCALE_OPTIONS.map((option) => (
               <button
                 key={option.id}

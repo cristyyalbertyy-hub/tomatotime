@@ -5,7 +5,7 @@ import {
   getCycleDurationMin,
   getWorkDurationSec,
 } from '../utils/settings'
-import { formatCycleHoursLocalized } from '../i18n/messages'
+import { formatCycleHoursLocalized, journeyPluralSuffix } from '../i18n/messages'
 import { useLocale } from '../hooks/useLocale'
 import { Tomato } from './Tomato'
 import { SessionTracks } from './SessionTracks'
@@ -106,7 +106,7 @@ export function MainScreen({
               {t('journey.overlaySub', {
                 hours: cycleHours,
                 count: journeys,
-                plural: journeys !== 1 ? 's' : '',
+                plural: journeyPluralSuffix(locale, journeys),
               })}
             </p>
             <a

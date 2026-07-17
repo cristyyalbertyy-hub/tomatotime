@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
   detectLocale,
+  getHtmlLang,
   getLocale,
   LOCALE_EVENT,
   setLocale as persistLocale,
@@ -13,7 +14,7 @@ export function useLocale() {
   const [locale, setLocaleState] = useState<Locale>(getLocale)
 
   useEffect(() => {
-    document.documentElement.lang = locale === 'pt' ? 'pt' : 'en'
+    document.documentElement.lang = getHtmlLang(locale)
   }, [locale])
 
   useEffect(() => {
