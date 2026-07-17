@@ -1,38 +1,46 @@
-TOMATO TIME — Notas para a Play Console
-========================================
+TOMATO TIME — Play Store Production (v1.1.0)
+=============================================
 
 Package ID (não alterar):
   com.studio9.tomatotime
 
-Ficheiro da app (upload em Internal testing):
-  tomato-time-v1.0.0.aab
+Ficheiro da app (upload em Production):
+  tomato-time-v1.1.0.aab
+
+Versão Android:
+  versionCode 3
+  versionName 1.1.0
+
+Preço: GRÁTIS (Free) — sem compras in-app
 
 POLÍTICA DE PRIVACIDADE — URL obrigatório
 -----------------------------------------
-Colar este URL na Play Console (Store listing + Data safety).
+  https://cristyyalbertyy-hub.github.io/tomatotime/privacy-policy.html
 
-  https://cristyyalbertyy-hub.github.io/tomatotime/
+  Alternativa (redirect): https://cristyyalbertyy-hub.github.io/tomatotime/
 
-  (Ativar em: github.com/cristyyalbertyy-hub/tomatotime → Settings → Pages
-   → branch main → folder /docs → Save — esperar 1–3 min)
-
-  URL alternativa: https://cristyyalbertyy-hub.github.io/tomatotime/privacy-policy.html
-
-  Repositório: https://github.com/cristyyalbertyy-hub/tomatotime
+WEBSITE (opcional na ficha)
+---------------------------
+  https://studio9medical.com/tomato-time/
 
 EMAIL DE CONTACTO NA LOJA
 -------------------------
-  [ email de suporte TheStudio9 / Studio 9 ]
+  hello@studio9medical.com
 
-CONTA DE TESTE (Internal testing)
----------------------------------
-Adicionar emails Gmail dos testadores na lista "Internal testing".
-Copiar o link de opt-in que a Google gera e enviar a cada pessoa.
+CONTA PLAY CONSOLE
+------------------
+  Developer: TheStudio9
+  App: Tomato Time
+
+ONDE FAZER UPLOAD
+-----------------
+  Test and release → Production → Create new release → upload AAB
+
+Guia passo a passo: docs/guia-producao-pt.md
+Textos da loja: docs/play-store-listing.md
 
 NÃO PARTILHAR NESTA PASTA
 -------------------------
   - tomatotime-release.keystore
   - keystore.properties
   - SIGNING_CREDENTIALS.txt
-
-Guia completo em português: docs/guia-teste-interno-pt.md

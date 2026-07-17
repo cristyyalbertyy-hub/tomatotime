@@ -154,7 +154,7 @@ run(gradlew, ['bundleRelease'], {
 })
 
 const aabSrc = join(androidDir, 'app', 'build', 'outputs', 'bundle', 'release', 'app-release.aab')
-const aabOut = join(root, 'play-store', 'tomato-time-v1.0.0.aab')
+const aabOut = join(root, 'play-store', 'tomato-time-v1.1.0.aab')
 
 if (!existsSync(aabSrc)) {
   console.error('AAB not found at expected path.')
@@ -168,7 +168,7 @@ console.log(`
 Done!
 
 Upload this file to Google Play Console:
-  play-store/tomato-time-v1.0.0.aab
+  play-store/tomato-time-v1.1.0.aab
 
 Signing credentials:
   android/SIGNING_CREDENTIALS.txt  (back this up!)

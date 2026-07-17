@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tomato Time — Guia Google Play Production v1.1.0</title>
+  <style>
+    @page { margin: 18mm 16mm; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Calibri, Arial, sans-serif;
+      color: #1a1a2e;
+      line-height: 1.55;
+      font-size: 10.5pt;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    h1 {
+      font-size: 20pt;
+      color: #14213d;
+      margin: 0 0 6px;
+      border-bottom: 3px solid #3aadab;
+      padding-bottom: 8px;
+    }
+    h2 {
+      font-size: 13pt;
+      color: #1f4e6b;
+      margin: 22px 0 8px;
+      page-break-after: avoid;
+    }
+    h3 { font-size: 11pt; margin: 14px 0 6px; color: #333; }
+    .meta { color: #5c6b7a; font-size: 9.5pt; margin-bottom: 18px; }
+    .box {
+      background: #f4faf9;
+      border: 1px solid #3aadab;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin: 10px 0;
+    }
+    .warn {
+      background: #fff8e6;
+      border-color: #e8890c;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 10pt;
+    }
+    th, td {
+      border: 1px solid #d0d8de;
+      padding: 7px 9px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #eef6f6; }
+    pre, .copy {
+      background: #f6f8fa;
+      border: 1px solid #dde3e8;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 9.5pt;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: Consolas, "Courier New", monospace;
+    }
+    ul { margin: 6px 0 6px 18px; }
+    li { margin: 4px 0; }
+    .checklist { list-style: none; padding: 0; margin: 0; }
+    .checklist li::before { content: "☐ "; font-weight: bold; }
+    .page-break { page-break-before: always; }
+    a { color: #1f4e6b; }
+  </style>
+</head>
+<body>
+
+  <h1>Tomato Time — Google Play (Production)</h1>
+  <p class="meta">
+    Guia para publicação na loja · Versão <strong>1.1.0</strong> (versionCode <strong>3</strong>) ·
+    <strong>Grátis</strong> · Março 2026<br />
+    Developer: <strong>TheStudio9</strong> · Marca: Studio 9 · Package: <code>com.studio9.tomatotime</code>
+  </p>
+
+  <div class="box">
+    <strong>Resumo:</strong> A app já existe na Play Console (teste interno anterior). Agora é fazer upload do
+    ficheiro <strong>tomato-time-v1.1.0.aab</strong> em <strong>Production</strong>, confirmar ficha + políticas, e submeter
+    para revisão Google (1–7 dias na 1.ª vez).
+  </div>
+
+  <h2>1. Ficheiros que vais receber (pasta play-store)</h2>
+  <table>
+    <tr><th>Ficheiro</th><th>Para quê</th></tr>
+    <tr><td><strong>tomato-time-v1.1.0.aab</strong></td><td>Upload na Play Console (Production release)</td></tr>
+    <tr><td>icon-512.png</td><td>Ícone da loja (512×512)</td></tr>
+    <tr><td>feature-graphic.png</td><td>Banner 1024×500</td></tr>
+    <tr><td>screenshots/ (5 imagens)</td><td>Capturas de ecrã do telemóvel</td></tr>
+    <tr><td>NOTAS.txt</td><td>URLs e contactos rápidos</td></tr>
+  </table>
+
+  <div class="box warn">
+    <strong>Nunca partilhar / pedir:</strong> ficheiros de assinatura (keystore, passwords). Só o developer precisa
+    deles para builds futuros.
+  </div>
+
+  <h2>2. Dados fixos para a ficha</h2>
+  <table>
+    <tr><th>Campo</th><th>Valor</th></tr>
+    <tr><td>Nome da app</td><td>Tomato Time</td></tr>
+    <tr><td>Categoria</td><td>Productivity</td></tr>
+    <tr><td>Preço</td><td><strong>Free</strong> (sem compras in-app)</td></tr>
+    <tr><td>Email de apoio</td><td>hello@studio9medical.com</td></tr>
+    <tr><td>Website</td><td>https://studio9medical.com/tomato-time/</td></tr>
+    <tr><td>Política de privacidade</td><td>https://cristyyalbertyy-hub.github.io/tomatotime/privacy-policy.html</td></tr>
+    <tr><td>Package ID</td><td>com.studio9.tomatotime (não alterar)</td></tr>
+    <tr><td>Play Console</td><td>https://play.google.com/console</td></tr>
+  </table>
+
+  <h2>3. Passo a passo na Play Console</h2>
+
+  <h3>3.1 Confirmar preço grátis</h3>
+  <p><strong>Monetize → Products → App pricing</strong> → <strong>Free</strong></p>
+
+  <h3>3.2 Ficha da loja</h3>
+  <p><strong>Grow → Store presence → Main store listing</strong></p>
+  <ul>
+    <li>Upload: icon-512.png, feature-graphic.png, screenshots (mínimo 2, recomendado 5)</li>
+    <li>Colar descrição curta e completa (secção 4 abaixo)</li>
+    <li>Privacy policy URL + email + website</li>
+  </ul>
+
+  <h3>3.3 App content (obrigatório)</h3>
+  <p><strong>Policy → App content</strong> — fechar todas as tarefas pendentes:</p>
+  <table>
+    <tr><th>Formulário</th><th>Resposta</th></tr>
+    <tr><td>Content rating</td><td>Productivity / Utility — sem conteúdo sensível → <strong>Everyone</strong></td></tr>
+    <tr><td>Target audience</td><td>13+ (ou conforme questionário)</td></tr>
+    <tr><td>Ads</td><td><strong>No</strong></td></tr>
+    <tr><td>Data safety</td><td>Não recolhe nem transmite dados; estatísticas só no dispositivo</td></tr>
+    <tr><td>App access</td><td>Funciona sem login</td></tr>
+    <tr><td>Health / News / COVID</td><td><strong>No</strong></td></tr>
+  </table>
+
+  <h3>3.4 Production release</h3>
+  <ol>
+    <li><strong>Test and release → Production → Create new release</strong></li>
+    <li>Upload <strong>tomato-time-v1.1.0.aab</strong></li>
+    <li>Aguardar validação (alguns minutos)</li>
+    <li>Colar <strong>Release notes</strong> (secção 5)</li>
+    <li><strong>Review release → Start rollout to Production</strong></li>
+    <li>Escolher países/regiões</li>
+    <li>Submeter — revisão Google: tipicamente <strong>1–7 dias</strong></li>
+  </ol>
+
+  <div class="page-break"></div>
+
+  <h2>4. Textos da loja (copiar para a Play Console)</h2>
+
+  <h3>Descrição curta (máx. 80 caracteres)</h3>
+  <div class="copy">Focus in 25-min bursts. Your tomato travels 4 sessions to complete a journey.</div>
+
+  <h3>Descrição completa (inglês — idioma predefinido da loja)</h3>
+  <div class="copy">Tomato Time is a cheerful Pomodoro timer built around a simple idea: focus is a journey, not a countdown.
+
+Instead of watching minutes tick down, you watch your tomato move forward — one step at a time — across four work sessions. Each session is 25 minutes, followed by a 5-minute break. Complete all four and you've finished a full 2-hour journey.
+
+WHY TOMATO TIME?
+
+Most Pomodoro apps look the same: a circle, a countdown, done. Tomato Time is different. Four horizontal tracks show exactly where you are in your cycle. Your tomato mascot changes mood as you work — focused, tired near the end, relaxed on breaks, and celebrating when you finish.
+
+HOW IT WORKS
+
+• Tap Go to start session I — your tomato begins its journey left to right
+• Work for 25 minutes, then enjoy a 5-minute break
+• Repeat for sessions II, III, and IV
+• Finish all four sessions and breaks to complete one Journey
+• Each completed work session counts as one Tomato in your Harvest
+
+YOUR HARVEST
+
+Track what you've accomplished in tomatoes, not hours:
+• Today's tomatoes and journeys
+• This week's progress with a 7-day bar chart
+• Current streak and all-time totals
+
+FEATURES
+
+• Classic Pomodoro rhythm: 25 min work / 5 min break × 4 sessions
+• Visual session tracks — always know which session you're in
+• Friendly tomato mascot with moods that match your session
+• 5 languages, dark mode, focus mode, countdown or count-up timer
+• Harvest stats + export CSV/JSON — stored on your device only
+• Optional sounds, haptics, and background notifications
+• Free — no account, no ads
+
+PRIVACY
+
+Tomato Time stores your harvest stats locally on your device. No sign-up, no cloud sync, no ads.
+
+Made with care by Studio 9. Published on Google Play by TheStudio9.
+Explore medical study packages at studio9medical.com</div>
+
+  <h2>5. Release notes (Production v1.1.0)</h2>
+  <div class="copy">Welcome to Tomato Time on Google Play!
+
+• 4-session Pomodoro journey with visual tracks and tomato mascot
+• Focus mode, dark theme, and 5 languages (EN, PT, FR, ES, IT)
+• Harvest stats: daily count, streak, 7-day chart, export CSV/JSON
+• Countdown or count-up timer — your choice
+• Optional sounds, haptics, and background notifications
+• Free — no account, no ads, your data stays on your device</div>
+
+  <h2>6. Data safety (texto em inglês se pedirem descrição)</h2>
+  <div class="copy">Tomato Time does not collect, transmit, or sell personal data. Session counts (tomatoes and journeys) are stored locally on the device only. No account, no analytics SDKs, no ads.</div>
+
+  <h2>7. Checklist antes de submeter</h2>
+  <ul class="checklist">
+    <li>Dashboard da consola sem tarefas críticas em falta</li>
+    <li>URL da privacy policy abre no browser (testar)</li>
+    <li>Preço = Free confirmado</li>
+    <li>Ficha com textos + imagens actualizadas</li>
+    <li>AAB v1.1.0 carregado em Production</li>
+    <li>Release notes preenchidas</li>
+    <li>Rollout para Production iniciado</li>
+  </ul>
+
+  <h2>8. Problemas comuns</h2>
+  <table>
+    <tr><th>Problema</th><th>Solução</th></tr>
+    <tr><td>「Complete setup」</td><td>Fechar App content + store listing</td></tr>
+    <tr><td>Não deixa upload AAB</td><td>Políticas ou ficha incompletas</td></tr>
+    <tr><td>Version code already used</td><td>Pedir ao developer AAB com code maior</td></tr>
+    <tr><td>Privacy inválida</td><td>URL tem de ser HTTPS pública, sem password</td></tr>
+    <tr><td>Revisão demorada</td><td>Normal na 1.ª Production (1–7 dias)</td></tr>
+  </table>
+
+  <h2>9. Depois de aprovada</h2>
+  <ul>
+    <li>Procurar «Tomato Time» na Play Store (publicado por TheStudio9)</li>
+    <li>Link no site: studio9medical.com/tomato-time/</li>
+    <li>Actualizações futuras: developer envia novo AAB + versionCode maior</li>
+  </ul>
+
+  <p class="meta" style="margin-top: 24px;">
+    Contacto developer (Cristóvão): para builds e AAB futuros ·
+    Contacto loja: hello@studio9medical.com ·
+    Studio 9 Medical Science
+  </p>
+
+</body>
+</html>

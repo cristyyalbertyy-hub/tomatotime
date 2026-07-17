@@ -54,8 +54,10 @@ FEATURES
 • Classic Pomodoro rhythm: 25 min work / 5 min break × 4 sessions
 • Visual session tracks — always know which session you're in (I, II, III, IV)
 • Friendly tomato mascot with moods that match your session
-• Gentle sound cues (optional): work complete, break start, back to work, journey complete
+• Optional sound cues (optional): work complete, break start, back to work, journey complete
 • Harvest stats stored on your device — no account required
+• 5 languages, dark mode, focus mode, countdown or count-up timer
+• Export harvest stats (CSV/JSON)
 • Timer keeps running when the app is in the background
 • Notifications when a session or break ends, so you never lose your rhythm
 • Clean, calm design with a light blue palette — easy on the eyes for long focus blocks
@@ -72,6 +74,7 @@ PRIVACY
 Tomato Time stores your harvest stats locally on your device. No sign-up, no cloud sync, no ads. Your focus data stays yours.
 
 Made with care by Studio 9. Published on Google Play by TheStudio9.
+Explore medical study packages at studio9medical.com
 ```
 
 ---
@@ -83,6 +86,19 @@ Your focus journey starts with one tomato.
 ```
 
 ---
+
+## What's New (v1.1.0) — Production release
+
+```
+Welcome to Tomato Time on Google Play!
+
+• 4-session Pomodoro journey with visual tracks and tomato mascot
+• Focus mode, dark theme, and 5 languages (EN, PT, FR, ES, IT)
+• Harvest stats: daily count, streak, 7-day chart, export CSV/JSON
+• Countdown or count-up timer — your choice
+• Optional sounds, haptics, and background notifications
+• Free — no account, no ads, your data stays on your device
+```
 
 ## What's New (v1.0.0)
 
